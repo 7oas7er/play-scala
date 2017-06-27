@@ -1,0 +1,49 @@
+@*
+* This template is called from the `index` template. This template
+* handles the rendering of the page header and body tags. It takes
+* two arguments, a `String` for the title of the page and an `Html`
+* object to insert into the body of the page.
+*@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        @* Here's where we render the page title `String`. *@
+        <title>@title</title>
+
+        <link rel="shortcut icon" cardType="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/tablesorter.css")">
+
+        <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/font-awesome.min.css")">
+
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="@routes.Assets.versioned("javascripts/jquery-3.2.1.min.js")" cardType="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/jquery.tablesorter.js")" cardType="text/javascript"></script>
+
+        <script src="@routes.Assets.versioned("javascripts/makeTableSortable.js")" cardType="text/javascript"></script>
+
+        <script cardType="text/javascript" async src="https://platform.twitter.com/widgets.js"></script>
+
+        <script>
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+                ga('create', 'UA-98918047-1', 'auto');
+                ga('send', 'pageview');
+
+        </script>
+
+    </head>
+    <body>
+        @* And here's where we render the `Html` object containing
+        * the page content. *@
+        @content
+    </body>
+</html>

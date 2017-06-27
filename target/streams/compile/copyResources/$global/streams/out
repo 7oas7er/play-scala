@@ -1,0 +1,8 @@
+[0m[[0mdebug[0m] [0mCopy resource mappings: [0m
+[0m[[0mdebug[0m] [0m	(/Users/fschlesinger/Qsync/professional/workspace/netrunner/conf/application.conf,/Users/fschlesinger/Qsync/professional/workspace/netrunner/target/scala-2.11/classes/application.conf)[0m
+[0m[[0mdebug[0m] [0m	(/Users/fschlesinger/Qsync/professional/workspace/netrunner/conf/catalog.csv,/Users/fschlesinger/Qsync/professional/workspace/netrunner/target/scala-2.11/classes/catalog.csv)[0m
+[0m[[0mdebug[0m] [0m	(/Users/fschlesinger/Qsync/professional/workspace/netrunner/conf/evolutions,/Users/fschlesinger/Qsync/professional/workspace/netrunner/target/scala-2.11/classes/evolutions)[0m
+[0m[[0mdebug[0m] [0m	(/Users/fschlesinger/Qsync/professional/workspace/netrunner/conf/logback.xml,/Users/fschlesinger/Qsync/professional/workspace/netrunner/target/scala-2.11/classes/logback.xml)[0m
+[0m[[0mdebug[0m] [0m	(/Users/fschlesinger/Qsync/professional/workspace/netrunner/conf/routes,/Users/fschlesinger/Qsync/professional/workspace/netrunner/target/scala-2.11/classes/routes)[0m
+[0m[[0mdebug[0m] [0m	(/Users/fschlesinger/Qsync/professional/workspace/netrunner/conf/evolutions/default,/Users/fschlesinger/Qsync/professional/workspace/netrunner/target/scala-2.11/classes/evolutions/default)[0m
+[0m[[0mdebug[0m] [0m	(/Users/fschlesinger/Qsync/professional/workspace/netrunner/conf/evolutions/default/1.sql,/Users/fschlesinger/Qsync/professional/workspace/netrunner/target/scala-2.11/classes/evolutions/default/1.sql)[0m

@@ -1,0 +1,40 @@
+@(selection: CardSelection)
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-striped tablesorter">
+                <thead>
+                    <tr><th>#</th><th>ID</th><th>Name</th><th>Alignment</th><th>Type</th><th>Card Text</th><th>Flavour Text</th><th>Rarity</th><th>Illustrator</th><th>Edition</th></tr>
+                </thead>
+                <tbody>
+                    @for(index <- 0 to selection.cards.length - 1) {
+                        <tr>
+                            <td>@(index + 1)</td>
+                            <td>@selection.cards(index).id</td>
+                            <td>@selection.cards(index).name</td>
+                            <td>@selection.cards(index).alignment</td>
+                            <td>@selection.cards(index).cardType</td>
+                            <td>@selection.cards(index).text</td>
+                            <td>@selection.cards(index).flavourText</td>
+                            <td>@selection.cards(index).rarity</td>
+                            <td>@selection.cards(index).illustrator</td>
+                            <td>@selection.cards(index).edition</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>IDs of cards in selection</h4>
+                    <p>
+                       @selection.ids
+                    <a class="btn btn-link" href="http://7oas7er.com/netrunner/rest/cards/ids/@selection.ids">
+                        <i class="fa fa-cloud-download" aria-hidden="true"></i>&nbsp;as json
+                    </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

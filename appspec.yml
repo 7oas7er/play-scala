@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: ./play-scala-0.1.0-SNAPSHOT.zip
+    destination: /tmp
+hooks:
+  ApplicationStop:
+    - location: scripts/StopApplication.sh
+      timeout: 60
+  BeforeInstall:
+    - location: scripts/CleanOldArtifact.sh
+      timeout: 60
+  AfterInstall:
+    - location: scripts/UnpackNewArtifact.sh
+      timeout: 60
+  ApplicationStart:
+    - location: scripts/StartApplication.sh
+      timeout: 60
