@@ -7,8 +7,6 @@ import scala.util.matching.Regex
 
 class NetrunnerSpec extends PlaySpec with GuiceOneAppPerSuite {
 
-
-
   def listOfIDRegex(count: Int): Regex = {
     ("""(\d{1,3},){""" + (count-1) + """}\d{1,3}""").r
   }
