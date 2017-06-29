@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 echo "StopApplication... "
 if [ ! -d /tmp/play-scala-application ]; then
     echo "No play-scala application found. Nothing to stop."

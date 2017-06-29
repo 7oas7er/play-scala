@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 echo "UnpackNewArtifact ..."
 cd /tmp
 unzip *zip -d play-scala-application
