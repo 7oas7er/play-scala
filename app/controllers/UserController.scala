@@ -12,9 +12,9 @@ import scala.concurrent.Future
 @Singleton
 class UserController @Inject()(userService: UserService) extends Controller {
 
-  def index = Action.async { implicit request =>
+  def register = Action.async { implicit request =>
     userService.listAllUsers map { users =>
-      Ok(views.html.user(UserForm.form, users))
+      Ok(views.html.index("User management", views.html.body(views.html.registerTop(),views.html.noMenu(),views.html.registerContent(UserForm.form, users))))
     }
   }
 
@@ -22,19 +22,19 @@ class UserController @Inject()(userService: UserService) extends Controller {
     UserForm.form.bindFromRequest.fold(
       // if any error in submitted data
       errorForm => {
-        Future.successful(BadRequest(views.html.user(errorForm, Seq.empty[User])))
+        Future.successful(BadRequest(views.html.body(views.html.registerTop(),views.html.noMenu(),views.html.registerContent(errorForm, Seq.empty[User]))))
       },
       data => {
         val newUser = User(0, data.firstName, data.lastName, data.email)
         userService.addUser(newUser).map (res =>
-        Redirect(routes.UserController.index())
+        Redirect(routes.UserController.register())
         )
       })
   }
 
   def deleteUser(id: Long) = Action.async { implicit request =>
     userService.deleteUser(id) map { res =>
-      Redirect(routes.UserController.index())
+      Redirect(routes.UserController.register())
     }
   }
 

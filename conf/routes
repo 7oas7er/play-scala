@@ -95,6 +95,10 @@ GET     /netrunner/rest/booster/classic    controllers.NetrunnerRestController.b
 # A Json containing a random generated classic booster
 GET     /netrunner/rest/booster/classic/    controllers.NetrunnerRestController.boosterClassic
 
-GET     /users                          controllers.UserController.index
+# User management
+
+GET     /register                          controllers.UserController.register
+
 POST    /user/add                        controllers.UserController.addUser
+
 GET     /user/delete/:id                 controllers.UserController.deleteUser(id : Long)
