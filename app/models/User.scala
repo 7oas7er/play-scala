@@ -14,9 +14,9 @@ import slick.driver.MySQLDriver.api._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-case class User(id: Long, firstName: String, lastName: String, email: String)
+case class User(id: Long, firstName: String, lastName: String, email: String, password: String)
 
-case class UserFormData(firstName: String, lastName: String, email: String)
+case class UserFormData(firstName: String, lastName: String, email: String, password: String)
 
 object UserForm {
 
@@ -24,7 +24,8 @@ object UserForm {
     mapping(
       "firstName" -> nonEmptyText,
       "lastName" -> nonEmptyText,
-      "email" -> email
+      "email" -> email,
+      "password" -> nonEmptyText
     )(UserFormData.apply)(UserFormData.unapply)
   )
 }
@@ -35,9 +36,10 @@ class UserTableDef(tag: Tag) extends Table[User](tag, "user") {
   def firstName = column[String]("first_name")
   def lastName = column[String]("last_name")
   def email = column[String]("email")
+  def password = column[String]("password")
 
   override def * =
-    (id, firstName, lastName, email) <>(User.tupled, User.unapply)
+    (id, firstName, lastName, email, password) <>(User.tupled, User.unapply)
 }
 
 @Singleton

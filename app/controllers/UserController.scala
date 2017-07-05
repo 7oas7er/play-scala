@@ -25,7 +25,7 @@ class UserController @Inject()(userService: UserService) extends Controller {
         Future.successful(BadRequest(views.html.body(views.html.registerTop(),views.html.noMenu(),views.html.registerContent(errorForm, Seq.empty[User]))))
       },
       data => {
-        val newUser = User(0, data.firstName, data.lastName, data.email)
+        val newUser = User(0, data.firstName, data.lastName, data.email, data.password)
         userService.addUser(newUser).map (res =>
         Redirect(routes.UserController.register())
         )
