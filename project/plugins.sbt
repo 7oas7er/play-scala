@@ -18,3 +18,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.1")
 addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.1.0")
 
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.6")
+
+// Improved compiler error messages
+addSbtPlugin("org.duhemm" % "sbt-errors-summary" % "0.3.0")
