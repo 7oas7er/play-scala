@@ -102,3 +102,7 @@ GET     /register                          controllers.UserController.register
 POST    /user/add                        controllers.UserController.addUser
 
 GET     /user/delete/:id                 controllers.UserController.deleteUser(id : Long)
+
+# Links to the admin area
+
+GET /admin                               controllers.AdminController.index
