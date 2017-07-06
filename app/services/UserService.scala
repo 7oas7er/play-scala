@@ -4,7 +4,9 @@ import javax.inject._
 
 import models.{User, Users}
 
-import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
+
 
 @Singleton
 class UserService @Inject()(users: Users) {
@@ -24,4 +26,13 @@ class UserService @Inject()(users: Users) {
   def listAllUsers: Future[Seq[User]] = {
     users.listAll
   }
+
+  def getUser(email: String): Future[Option[User]] = {
+    users.get(email)
+  }
+
+  def authenticate(user: User): Option[User] = {
+    Await.result(users.get(user.email), 500 millis)
+  }
+
 }

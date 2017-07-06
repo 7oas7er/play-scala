@@ -30,6 +30,18 @@ object UserForm {
   )
 }
 
+case class AuthUserFormData(email: String, password: String)
+
+object AuthUserForm {
+
+  val form = Form(
+    mapping(
+      "email" -> email,
+      "password" -> nonEmptyText
+    )(AuthUserFormData.apply)(AuthUserFormData.unapply)
+  )
+}
+
 class UserTableDef(tag: Tag) extends Table[User](tag, "user") {
 
   def id = column[Long]("id", O.PrimaryKey,O.AutoInc)
@@ -68,6 +80,10 @@ class Users @Inject() (appProvider: Provider[Application]) {
 
   def listAll: Future[Seq[User]] = {
     dbConfig.db.run(users.result)
+  }
+
+  def get(email: String): Future[Option[User]] = {
+    dbConfig.db.run(users.filter(_.email === email).result.headOption)
   }
 
 }

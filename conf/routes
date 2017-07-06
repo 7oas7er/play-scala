@@ -97,12 +97,16 @@ GET     /netrunner/rest/booster/classic/    controllers.NetrunnerRestController.
 
 # User management
 
-GET     /register                          controllers.UserController.register
+GET     /register                           controllers.UserController.register
 
-POST    /user/add                        controllers.UserController.addUser
+POST    /user/add                           controllers.UserController.addUser
 
-GET     /user/delete/:id                 controllers.UserController.deleteUser(id : Long)
+GET     /user/delete/:id                    controllers.UserController.deleteUser(id : Long)
+
+GET     /login                              controllers.UserController.login
+
+POST    /login                              controllers.UserController.authenticate
 
 # Links to the admin area
 
-GET /admin                               controllers.AdminController.index
+GET /admin                                  controllers.AdminController.index
