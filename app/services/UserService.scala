@@ -7,12 +7,15 @@ import models.{User, Users}
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
+import com.github.t3hnar.bcrypt._
+
 
 @Singleton
 class UserService @Inject()(users: Users) {
 
   def addUser(user: User): Future[String] = {
-    users.add(user)
+    val dbuser = User(0, user.firstName, user.lastName, user.email, (user.password).bcrypt)
+    users.add(dbuser)
   }
 
   def deleteUser(id: Long): Future[Int] = {
@@ -35,7 +38,7 @@ class UserService @Inject()(users: Users) {
     val maybeUser = Await.result(users.get(email), 500 millis)
     maybeUser match {
       case Some(user) =>
-        if(user.password == password) true
+        if(password.isBcrypted(user.password)) true
         else false
       case None => false
     }
