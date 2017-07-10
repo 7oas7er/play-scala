@@ -26,6 +26,7 @@ libraryDependencies +=  play.sbt.Play.autoImport.cache
 libraryDependencies +=  "mysql" % "mysql-connector-java" % "5.1.39"
 libraryDependencies +=  "com.typesafe.play" %% "play-slick" % "2.0.0"
 libraryDependencies +=  "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0"
+libraryDependencies += "com.github.t3hnar" %% "scala-bcrypt" % "3.0"
 libraryDependencies += evolutions
 
 resolvers in Global ++= Seq(

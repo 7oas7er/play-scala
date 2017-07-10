@@ -31,8 +31,15 @@ class UserService @Inject()(users: Users) {
     users.get(email)
   }
 
-  def authenticate(user: User): Option[User] = {
-    Await.result(users.get(user.email), 500 millis)
+  def authenticate(email: String, password: String): Boolean = {
+    val maybeUser = Await.result(users.get(email), 500 millis)
+    maybeUser match {
+      case Some(user) =>
+        if(user.password == password) true
+        else false
+      case None => false
+    }
+
   }
 
 }

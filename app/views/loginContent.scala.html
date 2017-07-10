@@ -1,4 +1,4 @@
-@(userForm: Form[models.AuthUserFormData])(implicit request: RequestHeader)
+@(userForm: Form[models.AuthUserFormData], loginFailed: Option[Boolean])(implicit request: RequestHeader)
 <div class="row">
     <div class="col-md-12">
 
@@ -17,6 +17,11 @@
             <button type="submit" class="btn btn-default">Submit</button>
 
         </form>
+
+        @if(loginFailed.isDefined && loginFailed.get == true) {
+            <br>
+            <div class="col-md-6 bg-danger"><p>Either your eMail is unknown to the us or you gave the wrong password.</p></div>
+        }
 
     </div>
 </div>

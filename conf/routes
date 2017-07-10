@@ -101,9 +101,9 @@ GET     /register                           controllers.UserController.register
 
 POST    /user/add                           controllers.UserController.addUser
 
-GET     /user/delete/:id                    controllers.UserController.deleteUser(id : Long)
+GET     /user/delete/:id                    controllers.UserController.deleteUser(id: Long)
 
-GET     /login                              controllers.UserController.login
+GET     /login                              controllers.UserController.login(loginFailed: Option[Boolean])
 
 POST    /login                              controllers.UserController.authenticate
 
