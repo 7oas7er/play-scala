@@ -7,6 +7,8 @@ import models.{User, Users}
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 import com.github.t3hnar.bcrypt._
 
 
@@ -14,7 +16,12 @@ import com.github.t3hnar.bcrypt._
 class UserService @Inject()(users: Users) {
 
   def addUser(user: User): Future[String] = {
-    users.add(User(0, user.firstName, user.lastName, user.email.toLowerCase, (user.password).bcrypt))
+    val maybeUser = Await.result(users.get(user.email.toLowerCase), 500 millis)
+    if(maybeUser.isEmpty) {
+      users.add(User(0, user.firstName, user.lastName, user.email.toLowerCase, (user.password).bcrypt))
+    } else {
+      Future[String]("A user with the email " + user.email.toLowerCase + " has already been registered.")
+    }
   }
 
   def deleteUser(id: Long): Future[Int] = {
