@@ -14,8 +14,7 @@ import com.github.t3hnar.bcrypt._
 class UserService @Inject()(users: Users) {
 
   def addUser(user: User): Future[String] = {
-    val dbuser = User(0, user.firstName, user.lastName, user.email, (user.password).bcrypt)
-    users.add(dbuser)
+    users.add(User(0, user.firstName, user.lastName, user.email.toLowerCase, (user.password).bcrypt))
   }
 
   def deleteUser(id: Long): Future[Int] = {
