@@ -12,7 +12,7 @@ class AdminController @Inject()(userService: UserService) extends Controller {
 
   def index = Action.async { implicit request =>
     userService.listAllUsers map {
-      users => Ok(views.html.index("Admin", views.html.body(views.html.adminTop(),views.html.noMenu(),views.html.adminContent(users))))
+      users => Ok(views.html.admin.admin(users))
     }
 
   }

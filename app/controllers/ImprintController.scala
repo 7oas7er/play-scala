@@ -8,6 +8,6 @@ import play.api.mvc._
 class ImprintController @Inject()() extends Controller {
 
   def getImprint()= Action {
-    Ok(views.html.index("Imprint", views.html.body(views.html.imprintTop(),views.html.noMenu(),views.html.imprintContent())))
+    Ok(views.html.imprint.imprint())
   }
 }

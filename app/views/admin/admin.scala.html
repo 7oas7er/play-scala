@@ -1,0 +1,3 @@
+@(users : Seq[models.User])(implicit request: RequestHeader)
+
+@index("Administration of the site", body(adminTop(), noMenu(), adminContent(users)))

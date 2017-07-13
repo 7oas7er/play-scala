@@ -20,7 +20,7 @@ class UserService @Inject()(users: Users) {
     if(maybeUser.isEmpty) {
       users.add(User(0, user.firstName, user.lastName, user.email.toLowerCase, (user.password).bcrypt))
     } else {
-      Future[String]("A user with the email " + user.email.toLowerCase + " has already been registered.")
+      Future[String]("A login with the email " + user.email.toLowerCase + " has already been registered.")
     }
   }
 

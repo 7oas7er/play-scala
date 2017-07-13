@@ -1,0 +1,3 @@
+@(userForm: Form[models.UserFormData])(implicit request: RequestHeader)
+
+@index("Register as new user", body(user.registerTop(), noMenu(), user.registerContent(userForm)))

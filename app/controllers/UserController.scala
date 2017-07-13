@@ -13,18 +13,17 @@ import scala.concurrent.Future
 class UserController @Inject()(userService: UserService) extends Controller {
 
   def login(loginFailed: Option[Boolean]) = Action { implicit request =>
-    Ok(views.html.index("Login as user", views.html.body(views.html.loginTop(),views.html.noMenu(),views.html.loginContent(AuthUserForm.form,loginFailed))))
+    Ok(views.html.user.login(AuthUserForm.form, loginFailed))
   }
 
   def register = Action { implicit request =>
-    Ok(views.html.index("Register as new user", views.html.body(views.html.registerTop(),views.html.noMenu(),views.html.registerContent(UserForm.form))))
+    Ok(views.html.user.register(UserForm.form))
   }
 
   def authenticate = Action.async { implicit request =>
     AuthUserForm.form.bindFromRequest.fold(
-      // if any error in submitted data
       errorForm => {
-        Future.successful(BadRequest(views.html.body(views.html.registerTop(),views.html.noMenu(),views.html.loginContent(errorForm,None))))
+        Future.successful(BadRequest(views.html.user.login(errorForm, None)))
       },
       data => {
         val isKnown = userService.authenticate(data.email, data.password)
@@ -42,9 +41,8 @@ class UserController @Inject()(userService: UserService) extends Controller {
 
   def addUser = Action.async { implicit request =>
     UserForm.form.bindFromRequest.fold(
-      // if any error in submitted data
       errorForm => {
-        Future.successful(BadRequest(views.html.body(views.html.registerTop(),views.html.noMenu(),views.html.registerContent(errorForm))))
+        Future.successful(BadRequest(views.html.user.register(errorForm)))
       },
       data => {
         val newUser = User(0, data.firstName, data.lastName, data.email, data.password)
