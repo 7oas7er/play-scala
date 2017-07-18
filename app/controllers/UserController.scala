@@ -23,16 +23,16 @@ class UserController @Inject()(userService: UserService) extends Controller {
   def authenticate = Action.async { implicit request =>
     AuthUserForm.form.bindFromRequest.fold(
       errorForm => {
-        Future.successful(BadRequest(views.html.user.login(errorForm, None)))
+        Future.successful(BadRequest(views.html.user.login(errorForm, None)).withNewSession)
       },
       data => {
         val isKnown = userService.authenticate(data.email, data.password)
         if(isKnown) {
           userService.getUser(data.email).map (res =>
-            Redirect(routes.AdminController.index()))
+            Redirect(routes.AdminController.index()).withSession(request.session + ("email" -> data.email) + ("user" -> res.getOrElse("").toString)))
         }
         else {
-          Future.successful(Redirect(routes.UserController.login(Some[Boolean](true))))
+          Future.successful(Redirect(routes.UserController.login(Some[Boolean](true))).withNewSession)
         }}
 
     )
