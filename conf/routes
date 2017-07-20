@@ -107,6 +107,8 @@ GET     /login                              controllers.UserController.login(log
 
 POST    /login                              controllers.UserController.authenticate
 
+GET     /logout                             controllers.UserController.logout
+
 # Links to the admin area
 
 GET /admin                                  controllers.AdminController.index

@@ -18,6 +18,8 @@ case class User(id: Long, firstName: String, lastName: String, email: String, pa
 
 case class UserFormData(firstName: String, lastName: String, email: String, password: String)
 
+object UnknownUser extends User(0, "unknown", "unknown", "unknown@unknown.com", "unknown")
+
 object UserForm {
 
   val form = Form(

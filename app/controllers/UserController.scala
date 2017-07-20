@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import models.{User, UserForm, AuthUserForm}
+import models.{AuthUserForm, UnknownUser, User, UserForm}
 import play.api.mvc._
 import services.UserService
 
@@ -29,15 +29,17 @@ class UserController @Inject()(userService: UserService) extends Controller {
         val isKnown = userService.authenticate(data.email, data.password)
         if(isKnown) {
           userService.getUser(data.email).map (res =>
-            Redirect(routes.AdminController.index()).withSession(request.session + ("email" -> data.email) + ("user" -> res.getOrElse("").toString)))
+            Redirect(routes.AdminController.index()).withSession(request.session + ("connected" -> data.email) + ("user" -> res.getOrElse(UnknownUser).firstName)))
         }
         else {
           Future.successful(Redirect(routes.UserController.login(Some[Boolean](true))).withNewSession)
         }}
-
     )
   }
 
+  def logout = Action.async { implicit request =>
+    Future.successful(Redirect(routes.UserController.login(Some[Boolean](false))).withNewSession)
+  }
 
   def addUser = Action.async { implicit request =>
     UserForm.form.bindFromRequest.fold(
