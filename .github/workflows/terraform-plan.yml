@@ -9,7 +9,6 @@ on:
       - main
     paths:
       - "infra/terraform/**"
-      -
       - ".github/workflows/terraform-plan.yml"
   pull_request:
     branches:
@@ -17,7 +16,6 @@ on:
       - main
     paths:
       - "infra/terraform/**"
-      -
       - ".github/workflows/terraform-plan.yml"
   workflow_dispatch:
 
