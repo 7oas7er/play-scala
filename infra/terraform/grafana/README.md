@@ -30,33 +30,27 @@ State key: `grafana/terraform.tfstate` in `shared-netrunner-terraform-state-buck
 
 ### Cloudflare edge analytics (Free plan)
 
-The official Grafana Cloudflare integration needs Cloudflare **Business/Enterprise**. On Free, use GraphQL via the Infinity data source instead.
+This Grafana Cloud stack is **shared with Block Drop**. The Infinity data source
+`infinity-cloudflare` / “Cloudflare GraphQL” is owned by Block Drop’s grafana root
+(creating it here returns 409). Netrunner only sets `cloudflare_zone_tag` so the
+dashboard zone variable matches `7oas7er.com`.
 
-1. Cloudflare → **My Profile → API Tokens → Create Token**.
-   - Use a token with **Zone → Analytics → Read** (and Zone → Zone → Read if prompted).
-   - Scope it to zone `7oas7er.com`.
-2. Set `cloudflare_analytics_token` in `terraform.tfvars` (or `CLOUDFLARE_ANALYTICS_TOKEN`).
-3. Set `cloudflare_zone_tag` to the zone id (`cd ../cloudflare && terraform output -raw zone_id`, or Zone ID in the Cloudflare overview).
-4. Probe datasets (expect `enabled: true` for `httpRequestsAdaptiveGroups` and `firewallEventsAdaptive`):
-
-```bash
-export CLOUDFLARE_API_TOKEN='...'   # Analytics Read token
-export CLOUDFLARE_ZONE_TAG='...'    # zone id
-./scripts/probe-cloudflare-graphql.sh
-```
-
-   On Cloudflare **Free**, `firewallEventsAdaptiveGroups` stays disabled — the dashboard uses HTTP status 403/429 from `httpRequestsAdaptiveGroups` plus the `firewallEventsAdaptive` event table instead.
-
-5. `terraform apply` — creates Infinity DS `infinity-cloudflare`. On the dashboard, confirm the **CF zoneTag** variable is populated (`701810fff825f90c0eea671970a0cc9e` for `7oas7er.com`).
+1. Ensure Block Drop grafana has already provisioned Infinity + the analytics token.
+2. Set `cloudflare_zone_tag` in Netrunner `terraform.tfvars` (zone id
+   `701810fff825f90c0eea671970a0cc9e` / cloudflare root `zone_id` output).
+3. Optional probe (Analytics Read token): `./scripts/probe-cloudflare-graphql.sh`
 
 ### GitHub Actions CI
 
-1. Create a fine-grained PAT for repo `7oas7er/netrunner` with **Actions: Read**, **Metadata: Read**, and **Contents: Read** if the plugin requires it.
+1. Create a fine-grained PAT for repo `7oas7er/play-scala` with **Actions: Read**,
+   **Metadata: Read**, and **Contents: Read** if the plugin requires it.
 2. Set `github_access_token` in `terraform.tfvars` (or `GITHUB_GRAFANA_TOKEN`).
-3. `terraform apply` — installs the `grafana-github-datasource` Cloud plugin (not present by default), then creates DS `github-netrunner`. Without the plugin install, the dashboard GitHub variable shows **No data sources found**.
+3. The `grafana-github-datasource` **plugin** must already be installed (Block Drop
+   grafana root). This root only creates DS `github-netrunner` — do not import or
+   manage the plugin install here (`version = "latest"` forces replace/409).
 4. Dashboard panels cover `deploy-netrunner.yml` and `terraform-plan.yml`.
 
-Without these tokens, synthetics + CloudWatch still apply; Cloudflare/GitHub data sources (and the GitHub plugin) are skipped.
+Without the GitHub token, synthetics + CloudWatch still apply; the GitHub DS is skipped.
 
 ## Apply
 
@@ -73,7 +67,7 @@ AWS profile: `7oas7er`. Tokens may also be supplied via `GRAFANA_*` env vars whe
 ## Notes
 
 - Set `enable_cloudwatch_scrape = false` in `terraform.tfvars` to remove the Cloud Provider AWS account + scrape job without deleting the IAM role.
-- Set `enable_cloudflare_edge = false` / `enable_github_ci = false` to skip those data sources even if tokens are present.
+- Set `enable_cloudflare_edge = false` to skip Cloudflare zoneTag dashboard wiring; `enable_github_ci = false` skips DS `github-netrunner`.
 - CloudWatch scrape covers `eu-north-1` and `us-east-1` (CloudFront metrics).
 - Tagged AWS resources (`Name` tags on Netrunner) improve metric discovery.
 - Shipping CloudWatch **Logs** into Grafana Cloud Logs is a follow-up (not required for the first scrape + synthetics setup).

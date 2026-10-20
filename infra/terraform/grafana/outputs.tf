@@ -50,8 +50,8 @@ output "netrunner_folder_uid" {
 }
 
 output "cloudflare_edge_datasource_uid" {
-  description = "Infinity Cloudflare GraphQL data source UID (null if not provisioned)."
-  value       = try(grafana_data_source.cloudflare_infinity[0].uid, null)
+  description = "Shared Infinity Cloudflare GraphQL data source UID (owned by Block Drop on this stack)."
+  value       = local.enable_cloudflare_edge ? "infinity-cloudflare" : null
 }
 
 output "github_ci_datasource_uid" {
@@ -60,7 +60,7 @@ output "github_ci_datasource_uid" {
 }
 
 output "enable_cloudflare_edge" {
-  description = "Whether the Cloudflare GraphQL Infinity data source is managed."
+  description = "Whether Netrunner dashboard Cloudflare panels expect the shared Infinity DS + zoneTag."
   value       = local.enable_cloudflare_edge
 }
 

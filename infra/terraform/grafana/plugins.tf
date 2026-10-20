@@ -3,12 +3,9 @@
 # ("No data sources found" on dashboard variables).
 #
 # Infinity (yesoreyeram-infinity-datasource) is pre-provisioned on this Cloud
-# stack — installing it via the API returns 409 Conflict. Do not manage it here.
-resource "grafana_cloud_plugin_installation" "github" {
-  count    = local.enable_github_ci ? 1 : 0
-  provider = grafana.cloud
-
-  stack_slug = var.stack_slug
-  slug       = "grafana-github-datasource"
-  version    = "latest"
-}
+# stack — do not install it via Terraform (API returns 409).
+#
+# This stack is shared with Block Drop. The GitHub plugin is installed/owned
+# there; managing it here with version = "latest" forces destroy/recreate and
+# 409s. Netrunner only needs the plugin present — create github-netrunner DS
+# in datasources.tf without an install resource.
