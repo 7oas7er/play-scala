@@ -98,7 +98,7 @@ variable "check_timeout_ms" {
 variable "enable_cloudflare_edge" {
   description = <<-EOT
     Wire Cloudflare zoneTag into the Netrunner dashboard (panels use shared
-    Infinity DS uid infinity-cloudflare owned by Block Drop on this stack).
+    Infinity DS uid infinity-cloudflare from 7oas7er/platform shared-obs).
     Requires cloudflare_zone_tag. Does not create the Infinity data source.
   EOT
   type        = bool
