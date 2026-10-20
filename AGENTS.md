@@ -7,8 +7,8 @@ Instructions for Cursor (and similar) agents working in this repo. Platform rule
 - Prefer **small diffs** that match existing patterns. No drive-by refactors outside the task.
 - Keep the catalog under `netrunner/` as **static HTML/CSS/plain JS** — no framework, bundler, package manager, or build step for the site.
 - **Terraform** is the source of truth for AWS / Cloudflare / Grafana. Do not reintroduce CDK or manage app resources with CloudFormation.
-- **Observability**: Grafana Cloud only. Do not add Checkly, Datadog, New Relic, or similar unless Frank explicitly asks to replace Grafana.
-- **Cloudflare** stays DNS/edge (analytics may be pulled *into* Grafana). Do not turn Cloudflare into a second monitoring product or default Workers platform for this app.
+- **Observability**: Grafana Cloud only. Do not add Checkly, Datadog, New Relic, or similar unless Frank explicitly asks to replace Grafana. Shared Infinity DS + GitHub plugin: [`7oas7er/platform`](https://github.com/7oas7er/platform) `shared-obs`.
+- **Cloudflare** app root is DNS only; zone rulesets live in platform `shared-edge`. Do not turn Cloudflare into a second monitoring product or default Workers platform for this app.
 - Public apps must **only accept Cloudflare-fronted traffic**; reject direct origin access.
 - **No auth / MySQL / Lambda** in the cards-only milestone unless Frank explicitly expands scope.
 

@@ -6,15 +6,15 @@ alwaysApply: true
 # App platform — observability (Grafana first)
 
 - **Default**: Grafana Cloud Free. Do **not** add Checkly, Datadog, New Relic, or similar unless asked to replace Grafana.
-- **IaC**: `infra/terraform/grafana/` (dedicated S3 state key). Tokens only in gitignored tfvars or `GRAFANA_*` / related env vars.
-- **Cloudflare** = DNS/edge only. Pull edge analytics into Grafana via GraphQL (Infinity). Skip Cloudflare Alloy on Free unless Business/Enterprise.
+- **IaC**: app `infra/terraform/grafana/` for dashboards/synthetics/CloudWatch/GitHub DS. Shared Infinity + GitHub plugin: [`7oas7er/platform`](https://github.com/7oas7er/platform) `shared-obs`. Tokens only in gitignored tfvars or `GRAFANA_*` / related env vars.
+- **Cloudflare** = DNS only at the app root. Pull edge analytics into Grafana via GraphQL (shared Infinity). Skip Cloudflare Alloy on Free unless Business/Enterprise.
 
 ## Pattern for a public web app
 
 1. **Synthetics (HTTP)** — prod + stg site URLs; critical API paths; labels `project`, `environment` (`prod`|`stg`), `kind` (`site`|`api`). Keep Free cheap (prod ~5m / ≤2 probes; stg ~15m / 1 probe).
 2. **CloudWatch scrape** — IAM role trusted by Grafana Labs `008923505280` with `sts:ExternalId` = stack `prometheus_user_id`. Scrape app services (e.g. `AWS/Lambda`, `AWS/CloudFront`); regions `eu-north-1` + `us-east-1` when CloudFront is involved. Tag resources; label `project=<app>`. Org RCP must exempt Grafana or AssumeRole fails.
-3. **Cloudflare edge (Free)** — Infinity → GraphQL: `httpRequestsAdaptiveGroups`, `firewallEventsAdaptive` table. Do **not** query `firewallEventsAdaptiveGroups` on Free.
-4. **GitHub Actions** — catalog plugin `grafana-github-datasource`; fine-grained PAT (Actions + Metadata read).
+3. **Cloudflare edge (Free)** — shared Infinity (platform) → GraphQL: `httpRequestsAdaptiveGroups`, `firewallEventsAdaptive` table. Do **not** query `firewallEventsAdaptiveGroups` on Free. App sets `cloudflare_zone_tag` only.
+4. **GitHub Actions** — plugin installed by platform; app creates per-app GitHub DS + fine-grained PAT (Actions + Metadata read).
 5. **One app dashboard** — synthetics + CloudWatch + Cloudflare + GitHub CI; publish via stack service account.
 
 **Do** reuse `project` / `environment` labels. **Don’t** add a second observability product or commit tokens/PATs/SA keys.

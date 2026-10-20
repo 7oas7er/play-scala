@@ -6,7 +6,7 @@ Operator checklist after this repo’s template transplant. Apply stays on your 
 
 - [ ] One AWS account; profile `7oas7er` configured
 - [ ] ACM certificate in **us-east-1** for `netrunner-stg.7oas7er.com` (and later `netrunner.7oas7er.com`) — see [`docs/acm-certificates.md`](acm-certificates.md). Do **not** leave the `ACCOUNT_ID` / `CERTIFICATE_ID` placeholder in `terraform.tfvars`.
-- [ ] Cloudflare zone `7oas7er.com` (shared with other apps — this root only manages Netrunner hostnames)
+- [ ] Cloudflare zone `7oas7er.com` (DNS in this repo; zone rulesets in [`7oas7er/platform`](https://github.com/7oas7er/platform) `shared-edge`)
 - [ ] Grafana Cloud Free stack
 - [ ] GitHub Environments on `7oas7er/play-scala`: `staging`, `production`, `terraform`
 - [ ] Fresh state bucket name (default) `shared-netrunner-terraform-state-bucket` — **do not** reuse Block Drop state keys
@@ -46,15 +46,15 @@ terraform init && terraform apply
 # If you Ctrl+C mid-apply and see "Error acquiring the state lock":
 #   terraform force-unlock <LOCK_ID>    # ID is printed in the error; only if no apply is still running
 
-# 3) Cloudflare DNS for Netrunner hosts (shared zone with Block Drop)
+# 3) Cloudflare DNS for Netrunner hosts (DNS only; zone rulesets in 7oas7er/platform)
 cd ../../../cloudflare
-cp terraform.tfvars.example terraform.tfvars   # CF domains from stg output; keep origin secrets in sync for docs
+cp terraform.tfvars.example terraform.tfvars   # CF domains from stg output
 export CLOUDFLARE_API_TOKEN=…                 # required — provider does not read this from tfvars
 terraform init && terraform apply
-# Then add netrunner origin-verify header rules to Block Drop’s existing transform
-# ruleset (or dashboard) — see infra/terraform/cloudflare/README.md
+# Origin-verify + cache: set netrunner_* secrets in platform shared-edge and apply there
+# (https://github.com/7oas7er/platform)
 
-# 4) Grafana synthetics / dashboard
+# 4) Grafana synthetics / dashboard (Infinity + GitHub plugin: platform shared-obs)
 cd ../grafana
 cp terraform.tfvars.example terraform.tfvars
 terraform init && terraform apply
