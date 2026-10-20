@@ -97,8 +97,9 @@ variable "check_timeout_ms" {
 
 variable "enable_cloudflare_edge" {
   description = <<-EOT
-    Provision Infinity data source for Cloudflare GraphQL edge analytics.
-    Also requires cloudflare_analytics_token and cloudflare_zone_tag.
+    Wire Cloudflare zoneTag into the Netrunner dashboard (panels use shared
+    Infinity DS uid infinity-cloudflare owned by Block Drop on this stack).
+    Requires cloudflare_zone_tag. Does not create the Infinity data source.
   EOT
   type        = bool
   default     = true
