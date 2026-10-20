@@ -10,6 +10,7 @@ Operator checklist after this repo’s template transplant. Apply stays on your 
 - [ ] Grafana Cloud Free stack
 - [ ] GitHub Environments on `7oas7er/play-scala`: `staging`, `production`, `terraform`
 - [ ] Fresh state bucket name (default) `shared-netrunner-terraform-state-bucket` — **do not** reuse Block Drop state keys
+- [ ] Same AWS account as Block Drop is fine; filter console/Cost Explorer by tag `Project=netrunner`
 
 ## OIDC subjects (defaults in Terraform)
 

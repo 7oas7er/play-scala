@@ -48,6 +48,17 @@ Examples for `stg`:
 
 Shared bootstrap resources use `shared` as the environment segment.
 
+## Tags
+
+Provider `default_tags` (bootstrap, stg, prod, and the Grafana root’s AWS provider) apply to all taggable resources:
+
+| Key | Value |
+|-----|--------|
+| `Project` | `netrunner` |
+| `Environment` | `stg` / `prod` / `shared` |
+
+Use `Project=netrunner` in the AWS console (or Cost Explorer) to separate this app from Block Drop in the same account. Resources may also carry a per-resource `Name` tag.
+
 Renaming named resources (buckets, roles, OACs) forces Terraform to replace them. Copy site objects to the new buckets before destroying the old ones, and update GitHub Actions `AWS_*` variables after the prod deploy role / bucket names change. The site bucket is not versioned — `netrunner/` in git is the source of truth.
 
 ## Apply order

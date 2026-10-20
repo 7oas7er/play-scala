@@ -13,6 +13,7 @@ Platform layout/CI: `app-terraform`.
 - Pattern: `[environment]-netrunner-[purpose]-[resource-type]` (e.g. `stg-netrunner-site-bucket`).
 - State bucket: `shared-netrunner-terraform-state-bucket`; keys `bootstrap/`, `envs/stg/`, `envs/prod/`, `cloudflare/`, `grafana/`.
 - Plan role: `shared-netrunner-terraform-plan-role` + GitHub Environment `terraform`.
+- AWS provider `default_tags`: `Project = "netrunner"` (plus `Environment`) on every taggable resource — filter by this tag in the console when sharing an account with Block Drop.
 
 ## Domains
 

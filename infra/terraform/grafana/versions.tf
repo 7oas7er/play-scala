@@ -30,6 +30,13 @@ terraform {
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
+
+  default_tags {
+    tags = {
+      Environment = "shared"
+      Project     = "netrunner"
+    }
+  }
 }
 
 # Portal / stack lookup (no Cloud Provider URL required yet).

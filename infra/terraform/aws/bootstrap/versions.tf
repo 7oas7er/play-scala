@@ -26,6 +26,7 @@ provider "aws" {
   default_tags {
     tags = {
       Environment = "shared"
+      Project     = "netrunner"
     }
   }
 }
