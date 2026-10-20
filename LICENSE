@@ -1,7 +1,17 @@
 License
 -------
-Written in 2016 by Lightbend <info@lightbend.com>
 
-To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty.
+This repository retains a CC0 public domain dedication from its Play Scala
+origins (Lightbend starter, 2016) for historical material. New Netrunner catalog
+and infrastructure work in this repository is likewise dedicated to the public
+domain under CC0 1.0 Universal where applicable.
 
-You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+To the extent possible under law, the author(s) have dedicated all copyright and
+related and neighboring rights to this software to the public domain worldwide.
+This software is distributed without any warranty.
+
+You should have received a copy of the CC0 Public Domain Dedication along with
+this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+Netrunner card text, names, and trademarks remain the property of their
+respective rights holders.

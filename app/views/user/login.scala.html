@@ -1,3 +1,0 @@
-@(userForm: Form[models.AuthUserFormData], loginFailed: Option[Boolean])(implicit request: RequestHeader)
-
-@index("Login", body(user.loginTop(), noMenu(), user.loginContent(userForm, loginFailed)))

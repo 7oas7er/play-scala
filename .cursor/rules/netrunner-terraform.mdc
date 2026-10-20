@@ -1,0 +1,30 @@
+---
+description: Netrunner Terraform naming and domains (static site only)
+globs: infra/terraform/**/*
+alwaysApply: false
+---
+
+# Netrunner — Terraform overlay
+
+Platform layout/CI: `app-terraform`.
+
+## Naming / state
+
+- Pattern: `[environment]-netrunner-[purpose]-[resource-type]` (e.g. `stg-netrunner-site-bucket`).
+- State bucket: `shared-netrunner-terraform-state-bucket`; keys `bootstrap/`, `envs/stg/`, `envs/prod/`, `cloudflare/`, `grafana/`.
+- Plan role: `shared-netrunner-terraform-plan-role` + GitHub Environment `terraform`.
+
+## Domains
+
+| Env | Domain |
+|-----|--------|
+| stg | `netrunner-stg.7oas7er.com` |
+| prod | `netrunner.7oas7er.com` |
+
+## App-specific
+
+- OIDC provider managed in **stg** only; prod looks it up.
+- **No Lambda / no `/api/scores`** — static S3 + CloudFront only.
+- Cloudflare manages only the two Netrunner hostnames (not www/apex — those stay with other apps on the zone).
+- **Origin-verify**: keep AWS `origin_verify_secret` in sync with Cloudflare; rotate via `infra/terraform/docs/origin-verify-secret-rotation.md`.
+- Access logs: `{env}-netrunner-access-logs-bucket` (CloudFront v2 + S3 site). CF 5xx alarms in `us-east-1`.
