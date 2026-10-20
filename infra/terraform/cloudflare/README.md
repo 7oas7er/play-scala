@@ -22,19 +22,20 @@ Token needs at least: Zone.DNS Edit, Zone.Read (and Cache Purge for deploy). For
 
 Without `CLOUDFLARE_API_TOKEN`, apply fails with `Missing X-Auth-Key, X-Auth-Email or Authorization headers`.
 
-## Origin-verify (shared zone)
+## Origin-verify + cache (shared zone)
 
-After AWS stg/prod have `origin_verify_secret`, add **two** “Modify Request Header” rules to the **existing** zone transform ruleset (Block Drop’s “origin verify” ruleset), or add the same rules in [Block Drop’s `origin_verify.tf`](https://github.com/7oas7er/block-drop) and apply there:
+Owned by **Block Drop**’s Cloudflare root (`7oas7er/block-drop`). After Netrunner DNS applies, merge/apply that repo’s PR that adds Netrunner host rules (branch `cursor/netrunner-origin-verify-rules` or successor), then locally:
 
-| When hostname equals | Set header `X-Origin-Verify` to |
-|----------------------|-----------------------------------|
-| `netrunner-stg.7oas7er.com` | same value as stg AWS `origin_verify_secret` / `stg_origin_verify_secret` |
-| `netrunner.7oas7er.com` | same value as prod AWS `origin_verify_secret` / `prod_origin_verify_secret` |
+```bash
+# in block-drop checkout
+cd infra/terraform/cloudflare
+# set netrunner_stg_origin_verify_secret / netrunner_prod_origin_verify_secret
+# to the same values as play-scala AWS origin_verify_secret (stg / prod)
+export CLOUDFLARE_API_TOKEN=…
+terraform apply
+```
 
-## Cache (optional)
-
-If Block Drop’s cache ruleset is host-scoped to `blockdrop*`, add a matching “respect origin Cache-Control” rule for:
-
-`http.host in {"netrunner.7oas7er.com" "netrunner-stg.7oas7er.com"}`
-
-in that same Block Drop cache ruleset (or Cloudflare dashboard).
+| Hostname | Secret source |
+|----------|----------------|
+| `netrunner-stg.7oas7er.com` | play-scala `envs/stg` `origin_verify_secret` |
+| `netrunner.7oas7er.com` | play-scala `envs/prod` `origin_verify_secret` |
