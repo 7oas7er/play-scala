@@ -9,7 +9,7 @@
         ▲
         │  app → platform only
         │
-   play-scala (this repo)     block-drop / future apps
+   netrunner (this repo)     block-drop / future apps
 ```
 
 Full platform write-up: [platform docs/architecture.md](https://github.com/7oas7er/platform/blob/main/docs/architecture.md). Decision: [ADR 0007](adr/0007-shared-edge-and-obs-platform.md) (mirrors platform ADR 0001).

@@ -39,7 +39,7 @@ Optional probe: `./scripts/probe-cloudflare-graphql.sh` or platform
 
 ### GitHub Actions CI
 
-1. Create a fine-grained PAT for repo `7oas7er/play-scala` with **Actions: Read**,
+1. Create a fine-grained PAT for repo `7oas7er/netrunner` with **Actions: Read**,
    **Metadata: Read**, and **Contents: Read** if the plugin requires it.
 2. Set `github_access_token` in `terraform.tfvars` (or `GITHUB_GRAFANA_TOKEN`).
 3. The `grafana-github-datasource` **plugin** is installed by platform `shared-obs`.
