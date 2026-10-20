@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Netrunner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=1">
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+  <header class="site-header">
+    <p class="brand">Netrunner</p>
+    <p class="tagline">Classic card catalog · random starters &amp; boosters</p>
+    <nav class="view-nav" aria-label="Card selections">
+      <a class="is-active" data-view="all" href="?view=all">All Cards</a>
+      <a data-view="starter-runner" href="?view=starter-runner">Runner Starter</a>
+      <a data-view="starter-corporation" href="?view=starter-corporation">Corp Starter</a>
+      <a data-view="booster-limited" href="?view=booster-limited">Limited Booster</a>
+      <a data-view="booster-proteus" href="?view=booster-proteus">Proteus Booster</a>
+      <a data-view="booster-classic" href="?view=booster-classic">Classic Booster</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <div>
+        <h1 id="view-title">All Cards</h1>
+        <p class="meta"><span id="view-count">0</span> cards</p>
+      </div>
+      <button type="button" id="regen" class="regen">Regenerate</button>
+    </div>
+    <p id="status" class="status" hidden role="alert"></p>
+    <div class="table-wrap">
+      <table id="cards-table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col" data-sort="id">ID</th>
+            <th scope="col" data-sort="name">Name</th>
+            <th scope="col" data-sort="alignment">Alignment</th>
+            <th scope="col" data-sort="cardType">Type</th>
+            <th scope="col" data-sort="text">Card Text</th>
+            <th scope="col" data-sort="flavourText">Flavour Text</th>
+            <th scope="col" data-sort="rarity">Rarity</th>
+            <th scope="col" data-sort="illustrator">Illustrator</th>
+            <th scope="col" data-sort="edition">Edition</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <section id="selection-ids" class="ids" hidden>
+      <h2>IDs in this selection</h2>
+      <p id="ids-text"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="imprint.html">Imprint</a>
+  </footer>
+
+  <script defer src="js/generators.js?v=1"></script>
+  <script defer src="js/catalog.js?v=1"></script>
+  <script defer src="js/main.js?v=1"></script>
+</body>
+</html>
