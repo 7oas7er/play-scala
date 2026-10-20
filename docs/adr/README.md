@@ -34,3 +34,4 @@ What becomes easier / harder; what agents must not “helpfully” undo.
 | [0004](0004-grafana-first-observability.md) | Grafana-first; Cloudflare is not APM |
 | [0005](0005-cloudflare-only-origin.md) | Cloudflare-only origin traffic |
 | [0006](0006-github-env-separation.md) | GitHub Environment separation (`staging` / `production`) |
+| [0007](0007-shared-edge-and-obs-platform.md) | Shared edge + Grafana obs in `7oas7er/platform` |

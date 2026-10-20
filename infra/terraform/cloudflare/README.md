@@ -1,41 +1,31 @@
-# Cloudflare — Netrunner
+# Cloudflare — Netrunner (DNS only)
 
 Manages **DNS only** for `netrunner.7oas7er.com` and `netrunner-stg.7oas7er.com` on the shared `7oas7er.com` zone.
 
-Zone-level rulesets (origin-verify transform, cache settings) and `ssl` mode are already owned by **Block Drop**’s Cloudflare root. IAM/Cloudflare allow only **one zone ruleset per phase**, so a second Terraform root must not create competing rulesets.
+**Zone rulesets** (origin-verify, cache, SSL, etc.) are owned by the platform repo — not Block Drop:
+
+https://github.com/7oas7er/platform → `infra/terraform/shared-edge`
+
+Cloudflare allows only **one zone ruleset per phase**; do not create competing rulesets here.
 
 ## Auth (required)
 
-The provider reads **`CLOUDFLARE_API_TOKEN`** from the environment (not from `terraform.tfvars`):
-
 ```bash
 export AWS_PROFILE=7oas7er
-export CLOUDFLARE_API_TOKEN=…   # same token you use for Block Drop CF apply / GitHub CLOUDFLARE_API_TOKEN
+export CLOUDFLARE_API_TOKEN=…   # Zone.DNS Edit, Zone.Read (+ Cache Purge for deploy)
 
 cd infra/terraform/cloudflare
-cp terraform.tfvars.example terraform.tfvars   # fill CloudFront domains + origin secrets (for docs below)
-terraform init
-terraform apply
+cp terraform.tfvars.example terraform.tfvars   # CloudFront domains
+terraform init && terraform apply
 ```
 
-Token needs at least: Zone.DNS Edit, Zone.Read (and Cache Purge for deploy). For adding origin-verify rules in the dashboard / Block Drop root, also Transform Rules Edit.
+## Origin-verify + cache
 
-Without `CLOUDFLARE_API_TOKEN`, apply fails with `Missing X-Auth-Key, X-Auth-Email or Authorization headers`.
+After AWS stg/prod have `origin_verify_secret`, set the matching vars in platform `shared-edge` and apply there:
 
-## Origin-verify + cache (shared zone)
+| Hostname | Platform tfvars |
+|----------|-----------------|
+| `netrunner-stg.7oas7er.com` | `netrunner_stg_origin_verify_secret` |
+| `netrunner.7oas7er.com` | `netrunner_prod_origin_verify_secret` |
 
-Owned by **Block Drop**’s Cloudflare root (`7oas7er/block-drop`). After Netrunner DNS applies, merge/apply that repo’s PR that adds Netrunner host rules (branch `cursor/netrunner-origin-verify-rules` or successor), then locally:
-
-```bash
-# in block-drop checkout
-cd infra/terraform/cloudflare
-# set netrunner_stg_origin_verify_secret / netrunner_prod_origin_verify_secret
-# to the same values as play-scala AWS origin_verify_secret (stg / prod)
-export CLOUDFLARE_API_TOKEN=…
-terraform apply
-```
-
-| Hostname | Secret source |
-|----------|----------------|
-| `netrunner-stg.7oas7er.com` | play-scala `envs/stg` `origin_verify_secret` |
-| `netrunner.7oas7er.com` | play-scala `envs/prod` `origin_verify_secret` |
+See platform [docs/MIGRATION.md](https://github.com/7oas7er/platform/blob/main/docs/MIGRATION.md) for first-time import from legacy Block Drop state.
