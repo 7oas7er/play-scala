@@ -1,0 +1,12 @@
+---
+description: Netrunner product overlay (static catalog); platform defaults live in app-* rules
+alwaysApply: true
+---
+
+# Netrunner — product
+
+Platform defaults: `app-core`, `app-aws-regions`, `app-observability` (see `.cursor/rules/README.md`).
+
+- **Product**: classic Netrunner card catalog with random starters/boosters (cards-only; no auth).
+- **Delivery**: static site only under `netrunner/` — HTML, CSS, plain JS. No framework, bundler, package manager, or build step for the site. Tests under `tests/` gate deploy.
+- **Agents**: `AGENTS.md`, `README.md`, `docs/adr/`, `SECURITY.md`. Prefer small diffs.

@@ -1,0 +1,15 @@
+---
+description: Netrunner deploy workflow paths and SITE_HOST expectations
+globs: .github/workflows/**/*
+alwaysApply: false
+---
+
+# Netrunner — deploy overlay
+
+Platform OIDC / Environments: `app-deploy`.
+
+- Workflow: `.github/workflows/deploy-netrunner.yml`
+- Site paths: `netrunner/**` (and the workflow file itself) trigger S3 sync
+- Tests under `tests/` always run when those paths (or the workflow) change
+- `SITE_HOST` GitHub Environment var: `netrunner-stg.7oas7er.com` or `netrunner.7oas7er.com`
+- Sync excludes `README.md`; HTML short cache; JS/CSS long immutable cache (`?v=` bump required)

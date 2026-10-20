@@ -1,0 +1,13 @@
+---
+description: Netrunner Grafana labels and dashboard path
+alwaysApply: true
+---
+
+# Netrunner — observability overlay
+
+Platform Grafana pattern: `app-observability`.
+
+- Synthetic / dashboard label: `project=netrunner`
+- Dashboard JSON: `infra/terraform/grafana/dashboards/netrunner.json`
+- Folder title: **Netrunner**
+- Synthetics: site checks for stg + prod only (no API checks)

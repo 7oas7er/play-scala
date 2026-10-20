@@ -1,0 +1,65 @@
+name: CodeQL
+
+# In-repo advanced setup (replaces GitHub default code scanning setup).
+# Analyzes the static catalog (javascript-typescript) plus GitHub Actions
+# workflows. See docs/codeql.md.
+on:
+  push:
+    branches:
+      - staging
+      - main
+    paths:
+      - "netrunner/**"
+      - ".github/workflows/**"
+      - ".github/codeql/**"
+  pull_request:
+    branches:
+      - staging
+      - main
+    paths:
+      - "netrunner/**"
+      - ".github/workflows/**"
+      - ".github/codeql/**"
+  schedule:
+    # Weekly catch-up if path-filtered PRs skipped something.
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: codeql-${{ github.workflow }}-${{ github.ref_name }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: javascript-typescript
+            build-mode: none
+          - language: actions
+            build-mode: none
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4.39.0
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          config-file: .github/codeql/codeql-config.yml
+          queries: security-extended
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4.39.0
+        with:
+          category: "/language:${{ matrix.language }}"

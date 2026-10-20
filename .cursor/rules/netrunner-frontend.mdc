@@ -1,0 +1,17 @@
+---
+description: Netrunner static catalog coding standards
+globs: netrunner/**/*
+alwaysApply: false
+---
+
+# Netrunner — frontend
+
+Product-only (no platform rename needed when cloning unless the static app path changes).
+
+- Stay vanilla: no React/Vue, no npm, no bundler, no TypeScript transpile step.
+- Globals: `NetrunnerGenerators`, `NetrunnerCatalog` (IIFE + `module.exports` for Node unit tests).
+- Keep script concerns split (`generators.js` / `catalog.js` / `main.js`). Prefer extending these over new frameworks.
+- Load classic `<script defer>` tags from `index.html`. Imprint only needs CSS.
+- Version JS/CSS with a shared `?v=` on every HTML reference; **bump `?v=` whenever JS or CSS changes**.
+- Card data: `data/catalog.csv` is the editable source; regenerate `data/catalog.json` via `node scripts/csv-to-catalog-json.mjs`.
+- Views are query-param driven (`?view=starter-runner`, etc.). No client router framework.

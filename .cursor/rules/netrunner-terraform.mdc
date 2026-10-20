@@ -1,0 +1,33 @@
+---
+description: Netrunner Terraform naming and domains (static site only)
+globs: infra/terraform/**/*
+alwaysApply: false
+---
+
+# Netrunner — Terraform overlay
+
+Platform layout/CI: `app-terraform`.
+
+## Naming / state
+
+- Pattern: `[environment]-netrunner-[purpose]-[resource-type]` (e.g. `stg-netrunner-site-bucket`).
+- State bucket: `shared-netrunner-terraform-state-bucket`; keys `envs/stg/`, `envs/prod/`, `cloudflare/`, `grafana/`. Bootstrap root uses **local** state (creates that bucket).
+- Bootstrap first apply: `terraform init -reconfigure` → `apply` — see `infra/terraform/aws/bootstrap/README.md`.
+- Plan role: `shared-netrunner-terraform-plan-role` + GitHub Environment `terraform`.
+- AWS provider `default_tags`: `Project = "netrunner"` (plus `Environment`) on every taggable resource — filter by this tag in the console when sharing an account with Block Drop.
+
+## Domains
+
+| Env | Domain |
+|-----|--------|
+| stg | `netrunner-stg.7oas7er.com` |
+| prod | `netrunner.7oas7er.com` |
+
+## App-specific
+
+- GitHub OIDC provider is **account-wide** (one URL → one IAM provider). Stg and prod both **look it up**; do not create a second provider when sharing an AWS account with Block Drop.
+- **No Lambda / no `/api/scores`** — static S3 + CloudFront only.
+- Cloudflare Terraform manages **DNS only** for the two Netrunner hostnames. Zone rulesets / SSL stay with Block Drop on the shared zone (one ruleset per phase).
+- **Origin-verify**: add Netrunner host rules to Block Drop’s transform ruleset (or dashboard); keep AWS `origin_verify_secret` in sync. See `infra/terraform/cloudflare/README.md`.
+- Local CF apply needs `export CLOUDFLARE_API_TOKEN=…` (not tfvars).
+- Access logs: `{env}-netrunner-access-logs-bucket` (CloudFront v2 + S3 site). CF 5xx alarms in `us-east-1`.

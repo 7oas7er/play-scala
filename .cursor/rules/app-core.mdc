@@ -1,0 +1,17 @@
+---
+description: Platform core — public web app in one AWS account (Terraform, Cloudflare, Grafana)
+alwaysApply: true
+---
+
+# App platform — core
+
+For a **public web app in one AWS account** (this repo’s template pattern):
+
+- **Hosting**: AWS **one account**, two environments (`stg` / `prod`). Terraform is the source of truth. Do **not** reintroduce CDK or manage app resources with CloudFormation.
+- **GitHub env separation**: feature work → **`staging`** (AWS stg only). Promote via **`staging` → `main`** (AWS prod). GitHub Environments `staging` / `production` must use **distinct** roles, buckets, and distributions.
+- **DNS**: Cloudflare (separate Terraform root) fronts CloudFront custom domains.
+- **Observability**: Grafana Cloud Free only — see `app-observability`. Cloudflare stays DNS/edge (analytics may be pulled *into* Grafana).
+- **Cloudflare-only traffic**: accept only traffic that came through Cloudflare; reject direct origin (CloudFront URL, ALB DNS, etc.). Mechanism may vary; principle matters.
+- **Secrets**: never commit `.tfstate`, `terraform.tfvars`, API tokens, or AWS keys. Local AWS profile `7oas7er`; GitHub Actions uses OIDC. See `SECURITY.md` for leak response.
+- **Prefer small diffs**; match existing patterns.
+- **Agents**: `AGENTS.md`, `README.md`, `docs/adr/`, `SECURITY.md`. New irreversible choice → short ADR under `docs/adr/`.

@@ -1,0 +1,16 @@
+# State backend uses env AWS_PROFILE / default chain (export AWS_PROFILE=7oas7er locally).
+#
+# Auth: export CLOUDFLARE_API_TOKEN before terraform plan/apply (not set in this file).
+
+# Zone id for 7oas7er.com (also stored as GitHub Environment CLOUDFLARE_ZONE_ID).
+# zone_id = "701810fff825f90c0eea671970a0cc9e"
+
+# CloudFront distribution domain names (from envs/*/ terraform output distribution_domain_name).
+prod_cloudfront_domain_name = "d111111abcdef8.cloudfront.net"
+stg_cloudfront_domain_name  = "d222222abcdef8.cloudfront.net"
+
+# Kept for operator reference when adding origin-verify rules to the shared-zone
+# ruleset (Block Drop CF root / dashboard). Must match AWS origin_verify_secret.
+# This Cloudflare root no longer applies these via Terraform (shared-zone conflict).
+stg_origin_verify_secret  = "replace-with-a-long-random-secret"
+prod_origin_verify_secret = "replace-with-a-different-long-random-secret"
