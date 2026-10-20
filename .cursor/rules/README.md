@@ -2,12 +2,14 @@
 
 Rules split so this repo can be cloned as a **solo + AI** template without fighting product-specific names forever.
 
+**Naming note:** Cursor `app-*` rules are the **in-repo app pattern**. The **GitHub platform repository** [`7oas7er/platform`](https://github.com/7oas7er/platform) holds shared-edge + shared-obs. Do not conflate the two. Architecture: [`docs/architecture.md`](../../docs/architecture.md).
+
 | Kind | Prefix | Role |
 |------|--------|------|
-| **Platform** | `app-*` | Public web app in **one AWS account**, Cloudflare edge, Grafana-first, Terraform SoT |
+| **App pattern** | `app-*` | Public web app in **one AWS account**, DNS-only Cloudflare in-app, Grafana-first, Terraform SoT; depends on `7oas7er/platform` |
 | **Product** | `netrunner-*` | This catalog app (static `netrunner/`, domains, naming) |
 
-When cloning for a new app: keep `app-*`, replace or delete `netrunner-*`, and follow the skill `.cursor/skills/new-app-from-template/`.
+When cloning for a new app: keep `app-*`, replace or delete `netrunner-*`, wire hosts into platform `shared-edge`, and follow Block Drop’s `new-app-from-template` skill.
 
 ## Files
 

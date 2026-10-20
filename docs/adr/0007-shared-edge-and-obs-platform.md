@@ -1,18 +1,23 @@
-# 0007 — Shared edge and observability platform
+# 0007 — Isolated apps + shared platform repository
 
 - **Status:** accepted
 - **Date:** 2026-10-21
+- **Canonical:** [`7oas7er/platform` ADR 0001](https://github.com/7oas7er/platform/blob/main/docs/adr/0001-shared-edge-and-obs.md)
 
 ## Context
 
-Netrunner shares zone `7oas7er.com` and a Grafana Cloud Free stack with Block Drop. Putting origin-verify / Infinity / GitHub plugin ownership inside Block Drop made this app implicitly depend on that repo.
+Sibling apps on zone `7oas7er.com` and one Grafana Cloud Free stack cannot each own zone rulesets (one per phase) or the same Infinity / GitHub plugin objects. Depending on Block Drop for those objects made this repo brittle and wrong for agents.
 
 ## Decision
 
-Shared zone policy and shared Grafana objects live in [`7oas7er/platform`](https://github.com/7oas7er/platform). This app’s Cloudflare root is DNS-only; Grafana does not create Infinity or install the GitHub plugin. Canonical ADR: platform `docs/adr/0001-shared-edge-and-obs.md`.
+1. **Apps stay isolated repositories** (product + AWS site + DNS + app Grafana).
+2. Shared zone policy and shared Grafana stack objects live in [`7oas7er/platform`](https://github.com/7oas7er/platform).
+3. This app’s Cloudflare root is **DNS only**; Grafana does not create Infinity or install the GitHub plugin.
+4. Dependency graph is **app → platform**, never Netrunner → Block Drop (or any app → app).
 
 ## Consequences
 
-- Dependency graph is **app → platform**, never Netrunner → Block Drop.
-- Agents must not recreate zone rulesets or Infinity / GitHub plugin installs here.
-- New host origin-verify secrets go in platform `shared-edge` tfvars.
+- Origin-verify secrets for Netrunner hosts: platform `shared-edge` tfvars.
+- Infinity / GitHub plugin: platform `shared-obs`.
+- Docs and Cursor rules must not say “owned by Block Drop.”
+- See [architecture.md](../architecture.md).

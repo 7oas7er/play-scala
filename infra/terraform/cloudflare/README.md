@@ -2,9 +2,7 @@
 
 Manages **DNS only** for `netrunner.7oas7er.com` and `netrunner-stg.7oas7er.com` on the shared `7oas7er.com` zone.
 
-**Zone rulesets** (origin-verify, cache, SSL, etc.) are owned by the platform repo — not Block Drop:
-
-https://github.com/7oas7er/platform → `infra/terraform/shared-edge`
+**Zone rulesets** (origin-verify, cache, SSL, etc.) are owned by [`7oas7er/platform`](https://github.com/7oas7er/platform) `shared-edge` — not by this app and not by Block Drop.
 
 Cloudflare allows only **one zone ruleset per phase**; do not create competing rulesets here.
 
