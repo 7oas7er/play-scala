@@ -30,24 +30,20 @@ State key: `grafana/terraform.tfstate` in `shared-netrunner-terraform-state-buck
 
 ### Cloudflare edge analytics (Free plan)
 
-This Grafana Cloud stack is **shared with Block Drop**. The Infinity data source
-`infinity-cloudflare` / “Cloudflare GraphQL” is owned by Block Drop’s grafana root
-(creating it here returns 409). Netrunner only sets `cloudflare_zone_tag` so the
-dashboard zone variable matches `7oas7er.com`.
+Infinity DS `infinity-cloudflare` is owned by
+[`7oas7er/platform`](https://github.com/7oas7er/platform) `shared-obs` (shared Free
+stack). This root only sets `cloudflare_zone_tag` for the dashboard zone variable.
 
-1. Ensure Block Drop grafana has already provisioned Infinity + the analytics token.
-2. Set `cloudflare_zone_tag` in Netrunner `terraform.tfvars` (zone id
-   `701810fff825f90c0eea671970a0cc9e` / cloudflare root `zone_id` output).
-3. Optional probe (Analytics Read token): `./scripts/probe-cloudflare-graphql.sh`
+Optional probe: `./scripts/probe-cloudflare-graphql.sh` or platform
+`shared-obs/scripts/`.
 
 ### GitHub Actions CI
 
 1. Create a fine-grained PAT for repo `7oas7er/play-scala` with **Actions: Read**,
    **Metadata: Read**, and **Contents: Read** if the plugin requires it.
 2. Set `github_access_token` in `terraform.tfvars` (or `GITHUB_GRAFANA_TOKEN`).
-3. The `grafana-github-datasource` **plugin** must already be installed (Block Drop
-   grafana root). This root only creates DS `github-netrunner` — do not import or
-   manage the plugin install here (`version = "latest"` forces replace/409).
+3. The `grafana-github-datasource` **plugin** is installed by platform `shared-obs`.
+   This root only creates DS `github-netrunner`.
 4. Dashboard panels cover `deploy-netrunner.yml` and `terraform-plan.yml`.
 
 Without the GitHub token, synthetics + CloudWatch still apply; the GitHub DS is skipped.
