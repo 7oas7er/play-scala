@@ -32,7 +32,7 @@ variable "github_actions_subject" {
   description = "GitHub Actions OIDC subject for the staging GitHub Environment (jobs with environment: staging). Confirm via CloudTrail AssumeRoleWithWebIdentity principalId if assume fails."
   type        = string
   # play-scala tokens use the classic sub (no @ownerId/@repoId); block-drop uses the ID form.
-  default     = "repo:7oas7er/play-scala:environment:staging"
+  default = "repo:7oas7er/play-scala:environment:staging"
 }
 
 variable "github_actions_plan_subject" {
