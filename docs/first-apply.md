@@ -27,15 +27,15 @@ Confirm against the GitHub OIDC claim after the Environments exist; update `gith
 ```bash
 export AWS_PROFILE=7oas7er
 
-# 1) Bootstrap state bucket (once) — S3 backend cannot init until the bucket exists.
-#    Full notes: infra/terraform/aws/bootstrap/README.md
+# 1) Bootstrap state bucket (once). This root uses a *local* backend on purpose
+#    (it creates the S3 bucket other roots use). See infra/terraform/aws/bootstrap/README.md
 cd infra/terraform/aws/bootstrap
 cp terraform.tfvars.example terraform.tfvars   # optional
-terraform init -backend=false
+# If a previous S3-backend init left .terraform confused: rm -rf .terraform
+terraform init -reconfigure
 terraform apply
-terraform init -migrate-state                  # copy local state into the new bucket
 
-# 2) Staging site + OIDC + plan role (normal S3 backend init from here on)
+# 2) Staging site + OIDC + plan role (S3 backend — bucket must exist from step 1)
 cd ../envs/stg
 cp terraform.tfvars.example terraform.tfvars   # cert ARN, origin-verify secret
 terraform init && terraform apply

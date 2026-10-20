@@ -11,8 +11,8 @@ Platform layout/CI: `app-terraform`.
 ## Naming / state
 
 - Pattern: `[environment]-netrunner-[purpose]-[resource-type]` (e.g. `stg-netrunner-site-bucket`).
-- State bucket: `shared-netrunner-terraform-state-bucket`; keys `bootstrap/`, `envs/stg/`, `envs/prod/`, `cloudflare/`, `grafana/`.
-- **First bootstrap**: `terraform init -backend=false` → `apply` → `terraform init -migrate-state` (bucket must exist before S3 backend init). See `infra/terraform/aws/bootstrap/README.md`.
+- State bucket: `shared-netrunner-terraform-state-bucket`; keys `envs/stg/`, `envs/prod/`, `cloudflare/`, `grafana/`. Bootstrap root uses **local** state (creates that bucket).
+- Bootstrap first apply: `terraform init -reconfigure` → `apply` — see `infra/terraform/aws/bootstrap/README.md`.
 - Plan role: `shared-netrunner-terraform-plan-role` + GitHub Environment `terraform`.
 - AWS provider `default_tags`: `Project = "netrunner"` (plus `Environment`) on every taggable resource — filter by this tag in the console when sharing an account with Block Drop.
 

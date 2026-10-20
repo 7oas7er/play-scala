@@ -9,21 +9,21 @@ One AWS account, two environments:
 
 Shared module: [`modules/site`](modules/site). The GitHub OIDC provider lives in **stg** only; prod looks it up with a data source.
 
-Bootstrap root: [`bootstrap`](bootstrap) creates the shared S3 state bucket. **First bootstrap** must use `terraform init -backend=false` → `apply` → `terraform init -migrate-state` (see [`bootstrap/README.md`](bootstrap/README.md)); plain `terraform init` fails until the bucket exists.
+Bootstrap root: [`bootstrap`](bootstrap) creates the shared S3 state bucket. It uses a **local** backend (see [`bootstrap/README.md`](bootstrap/README.md)) so the first apply is not blocked by a missing remote bucket.
 
 ## Remote state
 
 State is stored in S3 (not git):
 
-| Root | State key |
-|------|-----------|
-| `bootstrap` | `bootstrap/terraform.tfstate` |
-| `envs/stg` | `envs/stg/terraform.tfstate` |
-| `envs/prod` | `envs/prod/terraform.tfstate` |
-| `../cloudflare` | `cloudflare/terraform.tfstate` |
-| `../grafana` | `grafana/terraform.tfstate` |
+| Root | State |
+|------|--------|
+| `bootstrap` | **Local** `bootstrap/terraform.tfstate` (gitignored) |
+| `envs/stg` | S3 key `envs/stg/terraform.tfstate` |
+| `envs/prod` | S3 key `envs/prod/terraform.tfstate` |
+| `../cloudflare` | S3 key `cloudflare/terraform.tfstate` |
+| `../grafana` | S3 key `grafana/terraform.tfstate` |
 
-- Bucket: `shared-netrunner-terraform-state-bucket` (versioned, encrypted, private; shared with other apps on the account)
+- Bucket (for non-bootstrap roots): `shared-netrunner-terraform-state-bucket` (versioned, encrypted, private; Netrunner-only — do not reuse Block Drop’s state bucket)
 - Locking: S3 native lock files (`use_lockfile = true`); requires Terraform **>= 1.10**
 - After changing backend lock settings, run `terraform init -reconfigure` in that root
 
@@ -63,7 +63,7 @@ Renaming named resources (buckets, roles, OACs) forces Terraform to replace them
 
 ## Apply order
 
-1. Apply **bootstrap** once per [`bootstrap/README.md`](bootstrap/README.md) (`-backend=false` → apply → `-migrate-state`). Skip if the state bucket already exists.
+1. Apply **bootstrap** once per [`bootstrap/README.md`](bootstrap/README.md) (`terraform init -reconfigure` → `apply`). Skip if the state bucket already exists.
 2. Create/validate an ACM certificate in `us-east-1` for `netrunner-stg.7oas7er.com` and set `site_certificate_arn` in `envs/stg/terraform.tfvars`.
 3. Apply **stg**.
 4. Apply Cloudflare with `stg_cloudfront_domain_name` set to the stg `distribution_domain_name` output.
