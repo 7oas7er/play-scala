@@ -33,10 +33,10 @@ sm_access_token = "glsm_..."
 # cloudflare_zone_tag        = "701810fff825f90c0eea671970a0cc9e"
 # enable_cloudflare_edge     = true
 
-# GitHub Actions panels (fine-grained PAT: Actions + Metadata read on play-scala).
+# GitHub Actions panels (fine-grained PAT: Actions + Metadata read on netrunner).
 # github_access_token = "github_pat_..."
 # github_owner        = "7oas7er"
-# github_repository   = "play-scala"  # this GitHub repo name
+# github_repository   = "netrunner"  # this GitHub repo name (default in variables.tf)
 # enable_github_ci    = true
 
 # Optional overrides:
