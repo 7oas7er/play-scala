@@ -57,7 +57,7 @@ Create Environment **terraform** (Settings → Environments). No deploy branch r
 
 OIDC trust subject (already the Terraform default):
 
-`repo:7oas7er@2952810/play-scala@87063790:environment:terraform`
+`repo:7oas7er/play-scala:environment:terraform`
 
 If your GitHub subject string differs, set `github_actions_plan_subject` in stg tfvars and re-apply.
 

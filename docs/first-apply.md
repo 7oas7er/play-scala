@@ -14,13 +14,15 @@ Operator checklist after this repo’s template transplant. Apply stays on your 
 
 ## OIDC subjects (defaults in Terraform)
 
+play-scala issues the classic GitHub Actions `sub` (confirmed in CloudTrail). Do **not** copy Block Drop’s `@ownerId/@repoId` form unless CloudTrail shows that format for this repo:
+
 ```
-repo:7oas7er@2952810/play-scala@87063790:environment:staging
-repo:7oas7er@2952810/play-scala@87063790:environment:production
-repo:7oas7er@2952810/play-scala@87063790:environment:terraform
+repo:7oas7er/play-scala:environment:staging
+repo:7oas7er/play-scala:environment:production
+repo:7oas7er/play-scala:environment:terraform
 ```
 
-Confirm against the GitHub OIDC claim after the Environments exist; update `github_actions_subject` / `github_actions_plan_subject` if GitHub’s subject format differs.
+If `sts:AssumeRoleWithWebIdentity` fails, check CloudTrail `userIdentity.principalId` for the actual `sub` and update `github_actions_subject` / `github_actions_plan_subject`.
 
 ## Apply order
 

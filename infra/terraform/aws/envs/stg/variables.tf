@@ -29,15 +29,16 @@ variable "site_certificate_arn" {
 }
 
 variable "github_actions_subject" {
-  description = "Immutable GitHub Actions OIDC subject for the staging GitHub Environment (jobs with environment: staging)."
+  description = "GitHub Actions OIDC subject for the staging GitHub Environment (jobs with environment: staging). Confirm via CloudTrail AssumeRoleWithWebIdentity principalId if assume fails."
   type        = string
-  default     = "repo:7oas7er@2952810/play-scala@87063790:environment:staging"
+  # play-scala tokens use the classic sub (no @ownerId/@repoId); block-drop uses the ID form.
+  default     = "repo:7oas7er/play-scala:environment:staging"
 }
 
 variable "github_actions_plan_subject" {
-  description = "Immutable GitHub Actions OIDC subject for the terraform GitHub Environment (plan-only CI)."
+  description = "GitHub Actions OIDC subject for the terraform GitHub Environment (plan-only CI)."
   type        = string
-  default     = "repo:7oas7er@2952810/play-scala@87063790:environment:terraform"
+  default     = "repo:7oas7er/play-scala:environment:terraform"
 }
 
 variable "origin_verify_secret" {

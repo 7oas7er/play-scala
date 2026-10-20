@@ -29,9 +29,10 @@ variable "site_certificate_arn" {
 }
 
 variable "github_actions_subject" {
-  description = "Immutable GitHub Actions OIDC subject for the production GitHub Environment (jobs with environment: production)."
+  description = "GitHub Actions OIDC subject for the production GitHub Environment (jobs with environment: production). Confirm via CloudTrail if assume fails."
   type        = string
-  default     = "repo:7oas7er@2952810/play-scala@87063790:environment:production"
+  # play-scala tokens use the classic sub (no @ownerId/@repoId); block-drop uses the ID form.
+  default     = "repo:7oas7er/play-scala:environment:production"
 }
 
 variable "origin_verify_secret" {
