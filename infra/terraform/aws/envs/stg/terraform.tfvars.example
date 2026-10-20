@@ -2,8 +2,9 @@ aws_region = "eu-north-1"
 # Provider only (backends use env AWS_PROFILE / default chain).
 aws_profile = "7oas7er"
 
-# ACM certificate in us-east-1 for netrunner-stg.7oas7er.com.
-site_certificate_arn = "arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/CERTIFICATE_ID"
+# ACM certificate in us-east-1 for netrunner-stg.7oas7er.com (must be ISSUED).
+# Create + DNS-validate: docs/acm-certificates.md — replace this entire placeholder ARN.
+site_certificate_arn = "arn:aws:acm:us-east-1:877710816497:certificate/REPLACE_WITH_ISSUED_CERT_ID"
 
 # Must match Cloudflare stg_origin_verify_secret (never commit the real value).
 # Rotation: see infra/terraform/docs/origin-verify-secret-rotation.md

@@ -5,7 +5,7 @@ Operator checklist after this repo’s template transplant. Apply stays on your 
 ## Preconditions
 
 - [ ] One AWS account; profile `7oas7er` configured
-- [ ] ACM certificate in **us-east-1** for `netrunner-stg.7oas7er.com` (and later `netrunner.7oas7er.com`)
+- [ ] ACM certificate in **us-east-1** for `netrunner-stg.7oas7er.com` (and later `netrunner.7oas7er.com`) — see [`docs/acm-certificates.md`](acm-certificates.md). Do **not** leave the `ACCOUNT_ID` / `CERTIFICATE_ID` placeholder in `terraform.tfvars`.
 - [ ] Cloudflare zone `7oas7er.com` (shared with other apps — this root only manages Netrunner hostnames)
 - [ ] Grafana Cloud Free stack
 - [ ] GitHub Environments on `7oas7er/play-scala`: `staging`, `production`, `terraform`
@@ -38,7 +38,7 @@ terraform apply
 # 2) Staging site + OIDC + plan role (S3 backend — bucket must exist from step 1)
 cd ../envs/stg
 cp terraform.tfvars.example terraform.tfvars
-# Edit terraform.tfvars: set site_certificate_arn + a long random origin_verify_secret
+# Edit terraform.tfvars: real ISSUED ACM ARN (docs/acm-certificates.md) + origin_verify_secret
 # *before* apply (avoids interactive prompts; interrupting apply leaves a stale state lock).
 terraform init && terraform apply
 # If you Ctrl+C mid-apply and see "Error acquiring the state lock":
