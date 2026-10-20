@@ -37,8 +37,12 @@ terraform apply
 
 # 2) Staging site + OIDC + plan role (S3 backend — bucket must exist from step 1)
 cd ../envs/stg
-cp terraform.tfvars.example terraform.tfvars   # cert ARN, origin-verify secret
+cp terraform.tfvars.example terraform.tfvars
+# Edit terraform.tfvars: set site_certificate_arn + a long random origin_verify_secret
+# *before* apply (avoids interactive prompts; interrupting apply leaves a stale state lock).
 terraform init && terraform apply
+# If you Ctrl+C mid-apply and see "Error acquiring the state lock":
+#   terraform force-unlock <LOCK_ID>    # ID is printed in the error; only if no apply is still running
 
 # 3) Cloudflare DNS + origin-verify + cache for Netrunner hosts
 cd ../../../cloudflare
