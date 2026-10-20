@@ -25,7 +25,7 @@ Platform layout/CI: `app-terraform`.
 
 ## App-specific
 
-- OIDC provider managed in **stg** only; prod looks it up.
+- GitHub OIDC provider is **account-wide** (one URL → one IAM provider). Stg and prod both **look it up**; do not create a second provider when sharing an AWS account with Block Drop.
 - **No Lambda / no `/api/scores`** — static S3 + CloudFront only.
 - Cloudflare manages only the two Netrunner hostnames (not www/apex — those stay with other apps on the zone).
 - **Origin-verify**: keep AWS `origin_verify_secret` in sync with Cloudflare; rotate via `infra/terraform/docs/origin-verify-secret-rotation.md`.

@@ -7,7 +7,7 @@ One AWS account, two environments:
 | Staging | [`envs/stg`](envs/stg) | `netrunner-stg.7oas7er.com` |
 | Production | [`envs/prod`](envs/prod) | `netrunner.7oas7er.com` |
 
-Shared module: [`modules/site`](modules/site). The GitHub OIDC provider lives in **stg** only; prod looks it up with a data source.
+Shared module: [`modules/site`](modules/site). The GitHub Actions OIDC provider is **account-wide** (IAM allows one per issuer URL). Stg and prod both look it up with a data source — required when sharing the AWS account with Block Drop.
 
 Bootstrap root: [`bootstrap`](bootstrap) creates the shared S3 state bucket. It uses a **local** backend (see [`bootstrap/README.md`](bootstrap/README.md)) so the first apply is not blocked by a missing remote bucket.
 
