@@ -1,6 +1,6 @@
 # First local apply — Netrunner
 
-Operator checklist after this repo’s template transplant. Apply stays on your machine (`AWS_PROFILE=7oas7er`). CI never applies.
+Operator checklist after this repo’s template transplant. Apply stays on your machine (`AWS_PROFILE=7oas7er`). CI never applies. Ownership of edge/obs vs this app: [`docs/architecture.md`](architecture.md).
 
 ## Preconditions
 

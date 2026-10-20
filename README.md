@@ -1,6 +1,8 @@
 # Netrunner
 
-Classic Netrunner card catalog (cards-only): browse the full set, generate random Runner/Corp starters and Limited / Proteus / Classic boosters. Hosted with the same AWS / Cloudflare / Grafana stack pattern as the solo+AI app template ([Block Drop](https://github.com/7oas7er/block-drop)).
+Classic Netrunner card catalog (cards-only): browse the full set, generate random Runner/Corp starters and Limited / Proteus / Classic boosters. An **isolated app repo** following the solo+AI template ([Block Drop](https://github.com/7oas7er/block-drop)), with shared edge/obs in [`7oas7er/platform`](https://github.com/7oas7er/platform).
+
+**Fundamental design:** apps do not depend on each other — only on platform. Architecture: [`docs/architecture.md`](docs/architecture.md).
 
 The site is static HTML, CSS, and plain JavaScript under [`netrunner/`](netrunner/). How to run it locally: [`netrunner/README.md`](netrunner/README.md).
 
@@ -14,10 +16,11 @@ This repo previously ran on Play Framework / Scala (2017). It was rebuilt as a s
 | [`tests/`](tests/) | Node unit tests + Playwright e2e; gates deploy |
 | [`scripts/csv-to-catalog-json.mjs`](scripts/csv-to-catalog-json.mjs) | Regenerate `catalog.json` from CSV |
 | [`infra/terraform/aws/`](infra/terraform/aws/) | Site module + `envs/stg` / `envs/prod` + bootstrap |
-| [`infra/terraform/cloudflare/`](infra/terraform/cloudflare/) | DNS, cache, origin-verify for Netrunner hosts |
-| [`infra/terraform/grafana/`](infra/terraform/grafana/) | Synthetics, CloudWatch scrape, dashboards |
+| [`infra/terraform/cloudflare/`](infra/terraform/cloudflare/) | **DNS only** for Netrunner hosts (zone rulesets → platform `shared-edge`) |
+| [`infra/terraform/grafana/`](infra/terraform/grafana/) | App synthetics, CloudWatch, dashboard, GitHub DS (Infinity + plugin → platform `shared-obs`) |
 | [`.cursor/rules/`](.cursor/rules/) | Platform (`app-*`) + product (`netrunner-*`) Cursor rules |
 | [`AGENTS.md`](AGENTS.md) | Definition of done for AI-assisted changes |
+| [`docs/architecture.md`](docs/architecture.md) | App vs shared-platform ownership |
 | [`docs/`](docs/) | ADRs, ops docs, first-apply checklist |
 | [`SECURITY.md`](SECURITY.md) | Reporting + secret leak / rotation pointers |
 
@@ -56,8 +59,10 @@ Roots (separate state keys under `shared-netrunner-terraform-state-bucket`):
 
 - `infra/terraform/aws/bootstrap`
 - `infra/terraform/aws/envs/stg` and `envs/prod`
-- `infra/terraform/cloudflare`
-- `infra/terraform/grafana`
+- `infra/terraform/cloudflare` (DNS)
+- `infra/terraform/grafana` (app dashboards / synthetics / CW / GitHub DS)
+
+Plus platform roots (separate repo): `shared-edge`, `shared-obs` — see [`7oas7er/platform`](https://github.com/7oas7er/platform).
 
 Never commit `.tfstate`, `terraform.tfvars`, API tokens, or AWS keys.
 

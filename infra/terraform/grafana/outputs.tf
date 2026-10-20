@@ -50,7 +50,7 @@ output "netrunner_folder_uid" {
 }
 
 output "cloudflare_edge_datasource_uid" {
-  description = "Shared Infinity Cloudflare GraphQL data source UID (owned by Block Drop on this stack)."
+  description = "Shared Infinity Cloudflare GraphQL data source UID (platform shared-obs)."
   value       = local.enable_cloudflare_edge ? "infinity-cloudflare" : null
 }
 

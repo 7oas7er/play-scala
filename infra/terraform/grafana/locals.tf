@@ -11,8 +11,7 @@ locals {
   ]
 
   # nonsensitive(): presence checks on tokens must not taint boolean outputs/counts.
-  # Cloudflare Infinity DS is owned by Block Drop on this shared stack; this flag
-  # only gates dashboard zoneTag wiring / outputs (see datasources.tf).
+  # Infinity DS is owned by platform shared-obs; this flag only gates zoneTag wiring.
   enable_cloudflare_edge = nonsensitive(
     var.enable_cloudflare_edge
     && var.cloudflare_zone_tag != null
