@@ -44,10 +44,13 @@ terraform init && terraform apply
 # If you Ctrl+C mid-apply and see "Error acquiring the state lock":
 #   terraform force-unlock <LOCK_ID>    # ID is printed in the error; only if no apply is still running
 
-# 3) Cloudflare DNS + origin-verify + cache for Netrunner hosts
+# 3) Cloudflare DNS for Netrunner hosts (shared zone with Block Drop)
 cd ../../../cloudflare
-cp terraform.tfvars.example terraform.tfvars   # CF domains from stg/prod outputs
+cp terraform.tfvars.example terraform.tfvars   # CF domains from stg output; keep origin secrets in sync for docs
+export CLOUDFLARE_API_TOKEN=…                 # required — provider does not read this from tfvars
 terraform init && terraform apply
+# Then add netrunner origin-verify header rules to Block Drop’s existing transform
+# ruleset (or dashboard) — see infra/terraform/cloudflare/README.md
 
 # 4) Grafana synthetics / dashboard
 cd ../grafana
