@@ -9,7 +9,7 @@ One AWS account, two environments:
 
 Shared module: [`modules/site`](modules/site). The GitHub OIDC provider lives in **stg** only; prod looks it up with a data source.
 
-Bootstrap root: [`bootstrap`](bootstrap) creates the shared S3 state bucket.
+Bootstrap root: [`bootstrap`](bootstrap) creates the shared S3 state bucket. **First bootstrap** must use `terraform init -backend=false` → `apply` → `terraform init -migrate-state` (see [`bootstrap/README.md`](bootstrap/README.md)); plain `terraform init` fails until the bucket exists.
 
 ## Remote state
 
@@ -63,7 +63,7 @@ Renaming named resources (buckets, roles, OACs) forces Terraform to replace them
 
 ## Apply order
 
-1. Apply **bootstrap** once (already done if the state bucket exists).
+1. Apply **bootstrap** once per [`bootstrap/README.md`](bootstrap/README.md) (`-backend=false` → apply → `-migrate-state`). Skip if the state bucket already exists.
 2. Create/validate an ACM certificate in `us-east-1` for `netrunner-stg.7oas7er.com` and set `site_certificate_arn` in `envs/stg/terraform.tfvars`.
 3. Apply **stg**.
 4. Apply Cloudflare with `stg_cloudfront_domain_name` set to the stg `distribution_domain_name` output.
