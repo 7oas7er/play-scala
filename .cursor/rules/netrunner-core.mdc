@@ -5,8 +5,8 @@ alwaysApply: true
 
 # Netrunner — product
 
-Platform defaults: `app-core`, `app-aws-regions`, `app-observability` (see `.cursor/rules/README.md`).
+Platform defaults: `app-core`, `app-aws-regions`, `app-observability` (see `.cursor/rules/README.md`). Shared GitHub repo for zone/Grafana Free objects: [`7oas7er/platform`](https://github.com/7oas7er/platform) — see `docs/architecture.md`.
 
 - **Product**: classic Netrunner card catalog with random starters/boosters (cards-only; no auth).
 - **Delivery**: static site only under `netrunner/` — HTML, CSS, plain JS. No framework, bundler, package manager, or build step for the site. Tests under `tests/` gate deploy.
-- **Agents**: `AGENTS.md`, `README.md`, `docs/adr/`, `SECURITY.md`. Prefer small diffs.
+- **Agents**: `AGENTS.md`, `README.md`, `docs/architecture.md`, `docs/adr/`, `SECURITY.md`. Prefer small diffs.

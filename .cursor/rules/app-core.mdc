@@ -7,7 +7,8 @@ alwaysApply: true
 
 For a **public web app in one AWS account** (this repo’s template pattern):
 
-- **Hosting**: AWS **one account**, two environments (`stg` / `prod`). Terraform is the source of truth. Do **not** reintroduce CDK or manage app resources with CloudFormation.
+- **Repo isolation (fundamental)**: each app is its **own GitHub repository**. Shared zone/Grafana Free objects live in [`7oas7er/platform`](https://github.com/7oas7er/platform). Dependency is **app → platform** only — **never app → app** (including never Netrunner → Block Drop). See `docs/architecture.md` and ADR 0007.
+- **Hosting**: AWS **one account**, two environments (`stg` / `prod`). Terraform is the source of truth. Do **not** reintroduce CDK or manage app resources with CloudFormation. Tag taggable resources `Project=<app-slug>`.
 - **GitHub env separation**: feature work → **`staging`** (AWS stg only). Promote via **`staging` → `main`** (AWS prod). GitHub Environments `staging` / `production` must use **distinct** roles, buckets, and distributions.
 - **DNS**: Cloudflare app Terraform root is **DNS only**. Zone rulesets live in [`7oas7er/platform`](https://github.com/7oas7er/platform) `shared-edge` — never recreate them in an app root.
 - **Observability**: Grafana Cloud Free only — see `app-observability`. Shared Infinity DS + GitHub **plugin** live in platform `shared-obs`; app grafana roots own dashboards/synthetics/CloudWatch/per-app GitHub DS only.

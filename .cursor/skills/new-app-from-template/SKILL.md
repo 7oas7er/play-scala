@@ -1,56 +1,65 @@
 ---
 name: new-app-from-template
 description: >-
-  Bootstraps a new solo+AI public web app from the Netrunner template pattern
-  (AWS one account, Cloudflare edge, Grafana-first, Terraform SoT). Use when
-  cloning this repo, starting a new app from the template, renaming project
-  slugs, or walking first apply / first PR / promote-to-main.
+  Bootstraps a new solo+AI public web app from the Block Drop template pattern
+  (isolated app repo + 7oas7er/platform shared-edge/shared-obs, AWS one account,
+  Cloudflare DNS-only in-app, Grafana-first, Terraform SoT). Use when cloning
+  this repo, starting a new app from the template, renaming project slugs, or
+  walking first apply / first PR / promote-to-main.
 ---
 
 # New app from template
 
-Source pattern: this repo (`netrunner` + `app-*` Cursor rules). Read `.cursor/rules/README.md` first.
+Source pattern: this repo (`block-drop` + `app-*` Cursor rules) **plus** [`7oas7er/platform`](https://github.com/7oas7er/platform). Read `docs/architecture.md` and `.cursor/rules/README.md` first.
+
+**Fundamental:** the new app is its **own repository**. It must depend on platform for zone rulesets and shared Infinity/GitHub plugin — **not** on Block Drop or any sibling app.
+
+For an **existing** app that was not cloned from this template, use **`gap-against-app-template`** instead (gap table + migration plan).
 
 ## Preconditions
 
 - One AWS account, profile `7oas7er` (or update docs/rules to the new profile).
-- Cloudflare zone you control; Grafana Cloud Free stack.
+- Access to Cloudflare zone `7oas7er.com` via platform `shared-edge` (or your zone’s platform root).
+- Grafana Cloud Free stack already wired in platform `shared-obs`.
 - GitHub repo with Environments `staging`, `production`, `terraform`.
 
 ## Checklist (copy and tick)
 
 ```
 New app progress:
-- [ ] 1. Copy / clone layout
+- [ ] 1. Copy / clone layout (new isolated app repo)
 - [ ] 2. Rename product (paths, slug, domains)
 - [ ] 3. Cursor rules (keep app-*, replace product overlays)
-- [ ] 4. Terraform state keys + resource names
-- [ ] 5. Grafana labels / folder / dashboard
-- [ ] 6. GitHub Environments + OIDC subjects
-- [ ] 7. First local applies (bootstrap → stg → cloudflare → grafana)
-- [ ] 8. First PR → staging
-- [ ] 9. First promote staging → main
+- [ ] 4. Terraform state keys + resource names + Project tags
+- [ ] 5. Platform shared-edge: origin-verify (+ cache hosts) for new domains
+- [ ] 6. Grafana labels / folder / dashboard (no Infinity / no GitHub plugin)
+- [ ] 7. GitHub Environments + OIDC subjects
+- [ ] 8. First local applies (bootstrap → stg → cloudflare DNS → grafana; platform edge secrets)
+- [ ] 9. First PR → staging
+- [ ] 10. First promote staging → main
 ```
 
 ### 1. Copy layout
 
-Keep: `infra/terraform/{aws,cloudflare,grafana}/`, `infra/lambda/` (or replace with your API), `.github/workflows/`, `tests/`, `docs/adr/`, `AGENTS.md`, `SECURITY.md`, `app-*` rules.
+Keep: `infra/terraform/{aws,cloudflare,grafana}/`, `infra/lambda/` (or replace with your API), `.github/workflows/`, `tests/`, `docs/adr/`, `AGENTS.md`, `SECURITY.md`, `app-*` rules, `docs/architecture.md` (retarget to your app).
 
-Replace or empty: product static tree (`netrunner/` → your app dir), product dashboard JSON, product-specific ADRs if wrong.
+Replace or empty: product static tree (`block-drop/` → your app dir), product dashboard JSON, product-specific ADRs if wrong.
+
+Do **not** copy zone rulesets or Infinity resources into the new app — those stay in platform.
 
 ### 2. Rename product
 
 Pick an **app slug** (e.g. `my-app`) and domains.
 
 - Rename static dir; update deploy workflow paths and Dependabot directories.
-- Search-replace Terraform locals / names: `netrunner` → slug; update state bucket name if creating fresh state.
+- Search-replace Terraform locals / names: `block-drop` → slug; update state bucket name if creating fresh state.
 - Domains in Cloudflare + ACM + GitHub `SITE_HOST`.
 - Update `README.md`, `AGENTS.md`, product Cursor rules, Grafana `project=` label.
 
 ### 3. Cursor rules
 
 - **Keep** all `app-*.mdc`.
-- **Replace** `netrunner-*.mdc` with `<slug>-*.mdc` (or one thin `product-core` + frontend/terraform overlays).
+- **Replace** `block-drop-*.mdc` with `<slug>-*.mdc` (or one thin `product-core` + frontend/terraform overlays).
 - Update `.cursor/rules/README.md` table.
 - Do not leave conflicting alwaysApply rules that restate opposite platform choices.
 
@@ -60,14 +69,23 @@ Pick an **app slug** (e.g. `my-app`) and domains.
 - Keys typically: `bootstrap/`, `envs/stg/`, `envs/prod/`, `cloudflare/`, `grafana/`.
 - Fresh `terraform.tfvars` (gitignored) per root; never copy prod secrets from another app.
 
-### 5. Grafana
+### 5. Platform `shared-edge`
+
+In [`7oas7er/platform`](https://github.com/7oas7er/platform):
+
+- Add origin-verify secrets for stg/prod hosts (tfvars + variables).
+- Extend transform / cache host rules for the new hostnames.
+- Apply `shared-edge` **before** enabling the CloudFront Function gate in the app AWS root.
+
+### 6. Grafana (app root only)
 
 - New folder + dashboard; label `project=<slug>`.
 - Synthetics for site + critical API paths.
 - New stack service account name if publishing via Terraform.
-- Cloudflare analytics token scoped to the right zone.
+- Set `cloudflare_zone_tag`; use shared Infinity uid from platform — **do not** create Infinity or install the GitHub plugin.
+- Create per-app GitHub DS only (plugin already installed by `shared-obs`).
 
-### 6. GitHub Environments
+### 7. GitHub Environments
 
 | Environment | Points at |
 |-------------|-----------|
@@ -77,7 +95,7 @@ Pick an **app slug** (e.g. `my-app`) and domains.
 
 OIDC trust subjects must match `environment:…`. Distinct resources per env — see `docs/adr/0006-github-env-separation.md`.
 
-### 7. First local applies
+### 8. First local applies
 
 Order (adjust if bootstrap already exists):
 
@@ -85,20 +103,21 @@ Order (adjust if bootstrap already exists):
 export AWS_PROFILE=7oas7er
 # 1) bootstrap (state bucket) if new
 # 2) aws/envs/stg  (site + OIDC + plan role)
-# 3) cloudflare    (DNS + origin-verify for stg)
-# 4) grafana       (synthetics/dashboard; may need stg URLs)
-# 5) aws/envs/prod after stg is proven
+# 3) platform shared-edge secrets for new hosts (if not done in step 5)
+# 4) cloudflare    (DNS only for this app’s hosts)
+# 5) grafana       (synthetics/dashboard; may need stg URLs)
+# 6) aws/envs/prod after stg is proven
 ```
 
 Confirm Cloudflare-only gate (raw CloudFront URL 403; custom domain 200).
 
-### 8. First PR → staging
+### 9. First PR → staging
 
 - Branch from `staging`; small first PR (docs or no-op path under app dir).
 - Require green: `Required CI`, tests if site paths change, terraform plan/Checkov if infra changes.
 - Merge; confirm stg deploy + synthetics.
 
-### 9. First promote → main
+### 10. First promote → main
 
 - Open PR `staging` → `main` only when stg is healthy.
 - After merge: prod deploy; local `terraform apply` for prod roots if infra differed; confirm prod synthetics.
@@ -108,11 +127,14 @@ Confirm Cloudflare-only gate (raw CloudFront URL 403; custom domain 200).
 - Pointing `staging` and `production` GitHub Environments at the same role/bucket.
 - Adding a second monitoring SaaS or CI `terraform apply` without a new ADR.
 - Copying `terraform.tfvars` or state between apps.
-- Leaving `netrunner-*` alwaysApply rules that contradict the new product.
+- Recreating zone rulesets / Infinity / GitHub plugin inside the new app.
+- Making the new app depend on Block Drop (or any sibling) for edge/obs.
+- Leaving `block-drop-*` alwaysApply rules that contradict the new product.
 
 ## References
 
+- `docs/architecture.md`, platform `docs/architecture.md`
 - `.cursor/rules/README.md`
-- `docs/adr/` (especially 0003 local apply, 0005 Cloudflare-only, 0006 env separation)
+- `docs/adr/` (especially 0003 local apply, 0005 Cloudflare-only, 0006 env separation, 0007 platform)
 - `SECURITY.md`, `infra/terraform/docs/origin-verify-secret-rotation.md`
 - `docs/template-readiness-backlog.md`
