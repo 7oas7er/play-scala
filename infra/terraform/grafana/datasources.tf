@@ -1,12 +1,8 @@
-# Cloudflare GraphQL via Infinity is shared on this Grafana Cloud stack with
-# Block Drop (uid infinity-cloudflare / name "Cloudflare GraphQL"). Creating it
-# here returns 409. Dashboard panels already reference that uid; set
-# cloudflare_zone_tag so the Netrunner dashboard zone variable is populated.
-# Keep cloudflare_analytics_token in Block Drop's grafana root (token owner).
+# Infinity DS uid infinity-cloudflare is owned by https://github.com/7oas7er/platform
+# (shared-obs). Do not recreate it here (409 Conflict on shared stack).
+# Set cloudflare_zone_tag so the Netrunner dashboard zone variable is populated.
 
-# GitHub Actions / repo queries (no Alloy exporter).
-# Plugin grafana-github-datasource must already be installed on the stack
-# (Block Drop grafana root).
+# GitHub Actions / repo queries. Plugin install is owned by platform shared-obs.
 resource "grafana_data_source" "github" {
   count    = local.enable_github_ci ? 1 : 0
   provider = grafana.stack
