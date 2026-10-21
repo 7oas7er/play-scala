@@ -31,6 +31,10 @@ Note the output `github_terraform_plan_role_arn`.
 
 ### 2. GitHub Environment `terraform`
 
+> **CI symptom if skipped:** plan jobs fail at `Configure AWS credentials` with
+> `Could not load credentials from any providers` because `role-to-assume` is empty.
+> Deploy Environments (`staging` / `production`) being populated does **not** configure this one.
+
 Create Environment **terraform** (Settings → Environments). No deploy branch restriction required for plan-only.
 
 **Variables**
