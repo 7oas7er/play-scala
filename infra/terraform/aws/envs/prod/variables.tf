@@ -29,10 +29,10 @@ variable "site_certificate_arn" {
 }
 
 variable "github_actions_subject" {
-  description = "GitHub Actions OIDC subject for the production GitHub Environment (jobs with environment: production). Confirm via CloudTrail if assume fails."
+  description = "Immutable GitHub Actions OIDC subject for the production GitHub Environment (jobs with environment: production)."
   type        = string
-  # Classic sub (no @ownerId/@repoId); block-drop uses the ID form. Repo renamed play-scala → netrunner.
-  default = "repo:7oas7er/netrunner:environment:production"
+  # Matches GET /repos/7oas7er/netrunner/actions/oidc/customization/sub (use_immutable_subject).
+  default = "repo:7oas7er@2952810/netrunner@87063790:environment:production"
 }
 
 variable "origin_verify_secret" {

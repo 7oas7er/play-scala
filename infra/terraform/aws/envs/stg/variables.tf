@@ -29,16 +29,16 @@ variable "site_certificate_arn" {
 }
 
 variable "github_actions_subject" {
-  description = "GitHub Actions OIDC subject for the staging GitHub Environment (jobs with environment: staging). Confirm via CloudTrail AssumeRoleWithWebIdentity principalId if assume fails."
+  description = "Immutable GitHub Actions OIDC subject for the staging GitHub Environment (jobs with environment: staging)."
   type        = string
-  # Classic sub (no @ownerId/@repoId); block-drop uses the ID form. Repo renamed play-scala → netrunner.
-  default = "repo:7oas7er/netrunner:environment:staging"
+  # Matches GET /repos/7oas7er/netrunner/actions/oidc/customization/sub (use_immutable_subject).
+  default = "repo:7oas7er@2952810/netrunner@87063790:environment:staging"
 }
 
 variable "github_actions_plan_subject" {
-  description = "GitHub Actions OIDC subject for the terraform GitHub Environment (plan-only CI)."
+  description = "Immutable GitHub Actions OIDC subject for the terraform GitHub Environment (plan-only CI)."
   type        = string
-  default     = "repo:7oas7er/netrunner:environment:terraform"
+  default     = "repo:7oas7er@2952810/netrunner@87063790:environment:terraform"
 }
 
 variable "origin_verify_secret" {

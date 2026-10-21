@@ -9,21 +9,22 @@ Operator checklist after this repo’s template transplant. Apply stays on your 
 - [ ] Cloudflare zone `7oas7er.com` (DNS in this repo; zone rulesets in [`7oas7er/platform`](https://github.com/7oas7er/platform) `shared-edge`)
 - [ ] Grafana Cloud Free stack
 - [ ] GitHub Environments on `7oas7er/netrunner`: `staging`, `production`, `terraform`
+- [ ] GitHub Environment `terraform` vars/secrets populated (`infra/terraform/docs/terraform-plan-ci.md`) — empty env breaks Terraform plan CI
 - [ ] GitHub security floor applied + API-verified (`docs/github-branch-protection.md`) — mandatory on migrated repos
 - [ ] Fresh state bucket name (default) `shared-netrunner-terraform-state-bucket` — **do not** reuse Block Drop state keys
 - [ ] Same AWS account as Block Drop is fine; filter console/Cost Explorer by tag `Project=netrunner`
 
 ## OIDC subjects (defaults in Terraform)
 
-This repo issues the classic GitHub Actions `sub` (confirmed in CloudTrail). Do **not** copy Block Drop’s `@ownerId/@repoId` form unless CloudTrail shows that format for this repo:
+GitHub Actions on this account uses the **immutable** `sub` (owner/repo ids). Defaults match `GET /repos/7oas7er/netrunner/actions/oidc/customization/sub`:
 
 ```
-repo:7oas7er/netrunner:environment:staging
-repo:7oas7er/netrunner:environment:production
-repo:7oas7er/netrunner:environment:terraform
+repo:7oas7er@2952810/netrunner@87063790:environment:staging
+repo:7oas7er@2952810/netrunner@87063790:environment:production
+repo:7oas7er@2952810/netrunner@87063790:environment:terraform
 ```
 
-If `sts:AssumeRoleWithWebIdentity` fails, check CloudTrail `userIdentity.principalId` for the actual `sub` and update `github_actions_subject` / `github_actions_plan_subject`.
+If `sts:AssumeRoleWithWebIdentity` fails with “Not authorized”, re-check that API (or CloudTrail `userIdentity.principalId`) and update `github_actions_subject` / `github_actions_plan_subject`, then re-apply stg/prod.
 
 ## Apply order
 
