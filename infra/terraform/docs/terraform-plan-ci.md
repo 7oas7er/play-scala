@@ -59,11 +59,11 @@ Create Environment **terraform** (Settings → Environments). No deploy branch r
 | `GRAFANA_CLOUD_PROVIDER_ACCESS_TOKEN` | integration-management scopes |
 | `GRAFANA_SM_ACCESS_TOKEN` | Synthetic Monitoring token |
 
-OIDC trust subject (already the Terraform default):
+OIDC trust subject (immutable form; Terraform default):
 
-`repo:7oas7er/netrunner:environment:terraform`
+`repo:7oas7er@2952810/netrunner@87063790:environment:terraform`
 
-If your GitHub subject string differs, set `github_actions_plan_subject` in stg tfvars and re-apply.
+Confirm with `gh api repos/7oas7er/netrunner/actions/oidc/customization/sub`. If the prefix differs, set `github_actions_plan_subject` in stg tfvars and re-apply.
 
 ## Local commands after this change
 
