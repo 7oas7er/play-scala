@@ -46,7 +46,7 @@ Roots with lockfiles: `infra/terraform/aws/bootstrap`, `aws/envs/stg`, `aws/envs
 
 - Terraform / Node / Playwright **major** upgrades when pain or support ends
 - Re-read [template-readiness-backlog.md](template-readiness-backlog.md) P2.3 / P3 — only if needed
-- Confirm branch ruleset + CodeQL advanced setup still as documented
+- Confirm branch ruleset + CodeQL advanced setup + secret scanning / Dependabot alerts still as documented (`docs/github-branch-protection.md` verify commands)
 
 ## What not to add by default
 

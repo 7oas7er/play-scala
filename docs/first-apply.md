@@ -9,6 +9,7 @@ Operator checklist after this repo’s template transplant. Apply stays on your 
 - [ ] Cloudflare zone `7oas7er.com` (DNS in this repo; zone rulesets in [`7oas7er/platform`](https://github.com/7oas7er/platform) `shared-edge`)
 - [ ] Grafana Cloud Free stack
 - [ ] GitHub Environments on `7oas7er/netrunner`: `staging`, `production`, `terraform`
+- [ ] GitHub security floor applied + API-verified (`docs/github-branch-protection.md`) — mandatory on migrated repos
 - [ ] Fresh state bucket name (default) `shared-netrunner-terraform-state-bucket` — **do not** reuse Block Drop state keys
 - [ ] Same AWS account as Block Drop is fine; filter console/Cost Explorer by tag `Project=netrunner`
 

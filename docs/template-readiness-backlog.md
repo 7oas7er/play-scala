@@ -64,9 +64,9 @@ Work top-down. Prefer small PRs to `staging`. Check items off as you go (`[x]`).
 
 - [x] Document required checks for `staging` and `main` (tests; terraform plan when infra paths change)
 - [x] Enable GitHub branch protection / rulesets accordingly
-- [x] Confirm secret scanning + push protection are on for the repo
+- [x] Confirm secret scanning + push protection are on for the repo (**API verify** — never assume create-time defaults or sibling repos; see `docs/github-branch-protection.md`)
 
-**Why:** Solo now; templates need this written and enforced before a second human (or busier AI loop) arrives.
+**Why:** Solo now; templates need this written and enforced before a second human (or busier AI loop) arrives. Migrated/old repos often lack the floor newer public repos get at create time.
 
 ---
 
@@ -196,7 +196,7 @@ Work top-down. Prefer small PRs to `staging`. Check items off as you go (`[x]`).
 | P0.2 | done | `AGENTS.md` |
 | P0.3 | done | Checkov in terraform-plan + `docs/iac-policy.md` |
 | P0.4 | done | `dependency-audit.yml` + compression override in tests |
-| P0.5 | done | `docs/github-branch-protection.md` + ruleset on staging/main (`Required CI`) |
+| P0.5 | done | `docs/github-branch-protection.md` + ruleset on staging/main (`Required CI`); security floor API-applied on `7oas7er/netrunner` (Dependabot alerts, secret scanning + push protection, default branch `main`, read-only Actions token) |
 | P1.1 | done | `docs/adr/` (0001–0006) |
 | P1.2 | done | `app-*` + thin `netrunner-*`; `.cursor/rules/README.md` |
 | P1.3 | done | `.cursor/skills/new-app-from-template` (+ personal store copy) |
