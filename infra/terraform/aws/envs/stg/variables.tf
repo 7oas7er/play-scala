@@ -32,7 +32,7 @@ variable "github_actions_subject" {
   description = "Immutable GitHub Actions OIDC subject for the staging GitHub Environment (jobs with environment: staging)."
   type        = string
   # Matches GET /repos/7oas7er/netrunner/actions/oidc/customization/sub (use_immutable_subject).
-  default     = "repo:7oas7er@2952810/netrunner@87063790:environment:staging"
+  default = "repo:7oas7er@2952810/netrunner@87063790:environment:staging"
 }
 
 variable "github_actions_plan_subject" {
