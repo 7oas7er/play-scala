@@ -225,6 +225,15 @@ jobs:
           terraform_version: "1.11.4"
           terraform_wrapper: false
 
+      - name: Require plan role ARN
+        env:
+          ROLE_ARN: ${{ vars.AWS_TERRAFORM_PLAN_ROLE_ARN }}
+        run: |
+          if [ -z "$ROLE_ARN" ]; then
+            echo "::error::GitHub Environment 'terraform' is missing variable AWS_TERRAFORM_PLAN_ROLE_ARN. See infra/terraform/docs/terraform-plan-ci.md (one-time setup)."
+            exit 1
+          fi
+
       - name: Configure AWS credentials (plan role)
         uses: aws-actions/configure-aws-credentials@v6.3.0
         with:
@@ -307,6 +316,15 @@ jobs:
           terraform_version: "1.11.4"
           terraform_wrapper: false
 
+      - name: Require plan role ARN
+        env:
+          ROLE_ARN: ${{ vars.AWS_TERRAFORM_PLAN_ROLE_ARN }}
+        run: |
+          if [ -z "$ROLE_ARN" ]; then
+            echo "::error::GitHub Environment 'terraform' is missing variable AWS_TERRAFORM_PLAN_ROLE_ARN. See infra/terraform/docs/terraform-plan-ci.md (one-time setup)."
+            exit 1
+          fi
+
       - name: Configure AWS credentials (state access)
         uses: aws-actions/configure-aws-credentials@v6.3.0
         with:
@@ -358,6 +376,15 @@ jobs:
         with:
           terraform_version: "1.11.4"
           terraform_wrapper: false
+
+      - name: Require plan role ARN
+        env:
+          ROLE_ARN: ${{ vars.AWS_TERRAFORM_PLAN_ROLE_ARN }}
+        run: |
+          if [ -z "$ROLE_ARN" ]; then
+            echo "::error::GitHub Environment 'terraform' is missing variable AWS_TERRAFORM_PLAN_ROLE_ARN. See infra/terraform/docs/terraform-plan-ci.md (one-time setup)."
+            exit 1
+          fi
 
       - name: Configure AWS credentials (state + IAM read)
         uses: aws-actions/configure-aws-credentials@v6.3.0
