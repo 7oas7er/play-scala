@@ -8,18 +8,19 @@ Operator checklist after this repo’s template transplant. Apply stays on your 
 - [ ] ACM certificate in **us-east-1** for `netrunner-stg.7oas7er.com` (and later `netrunner.7oas7er.com`) — see [`docs/acm-certificates.md`](acm-certificates.md). Do **not** leave the `ACCOUNT_ID` / `CERTIFICATE_ID` placeholder in `terraform.tfvars`.
 - [ ] Cloudflare zone `7oas7er.com` (DNS in this repo; zone rulesets in [`7oas7er/platform`](https://github.com/7oas7er/platform) `shared-edge`)
 - [ ] Grafana Cloud Free stack
-- [ ] GitHub Environments on `7oas7er/play-scala`: `staging`, `production`, `terraform`
+- [ ] GitHub Environments on `7oas7er/netrunner`: `staging`, `production`, `terraform`
+- [ ] GitHub security floor applied + API-verified (`docs/github-branch-protection.md`) — mandatory on migrated repos
 - [ ] Fresh state bucket name (default) `shared-netrunner-terraform-state-bucket` — **do not** reuse Block Drop state keys
 - [ ] Same AWS account as Block Drop is fine; filter console/Cost Explorer by tag `Project=netrunner`
 
 ## OIDC subjects (defaults in Terraform)
 
-play-scala issues the classic GitHub Actions `sub` (confirmed in CloudTrail). Do **not** copy Block Drop’s `@ownerId/@repoId` form unless CloudTrail shows that format for this repo:
+This repo issues the classic GitHub Actions `sub` (confirmed in CloudTrail). Do **not** copy Block Drop’s `@ownerId/@repoId` form unless CloudTrail shows that format for this repo:
 
 ```
-repo:7oas7er/play-scala:environment:staging
-repo:7oas7er/play-scala:environment:production
-repo:7oas7er/play-scala:environment:terraform
+repo:7oas7er/netrunner:environment:staging
+repo:7oas7er/netrunner:environment:production
+repo:7oas7er/netrunner:environment:terraform
 ```
 
 If `sts:AssumeRoleWithWebIdentity` fails, check CloudTrail `userIdentity.principalId` for the actual `sub` and update `github_actions_subject` / `github_actions_plan_subject`.

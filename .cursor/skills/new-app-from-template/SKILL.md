@@ -21,7 +21,7 @@ For an **existing** app that was not cloned from this template, use **`gap-again
 - One AWS account, profile `7oas7er` (or update docs/rules to the new profile).
 - Access to Cloudflare zone `7oas7er.com` via platform `shared-edge` (or your zone’s platform root).
 - Grafana Cloud Free stack already wired in platform `shared-obs`.
-- GitHub repo with Environments `staging`, `production`, `terraform`.
+- GitHub repo (new **or** existing/migrated) with Environments `staging`, `production`, `terraform`.
 
 ## Checklist (copy and tick)
 
@@ -34,6 +34,7 @@ New app progress:
 - [ ] 5. Platform shared-edge: origin-verify (+ cache hosts) for new domains
 - [ ] 6. Grafana labels / folder / dashboard (no Infinity / no GitHub plugin)
 - [ ] 7. GitHub Environments + OIDC subjects
+- [ ] 7b. GitHub security floor (apply + API-verify — see docs/github-branch-protection.md)
 - [ ] 8. First local applies (bootstrap → stg → cloudflare DNS → grafana; platform edge secrets)
 - [ ] 9. First PR → staging
 - [ ] 10. First promote staging → main
@@ -95,6 +96,20 @@ In [`7oas7er/platform`](https://github.com/7oas7er/platform):
 
 OIDC trust subjects must match `environment:…`. Distinct resources per env — see `docs/adr/0006-github-env-separation.md`.
 
+### 7b. GitHub security floor (mandatory — new **and** migrated repos)
+
+Repo Settings are **not** copied with git. Old public repos often lack create-time defaults that Block Drop got in 2026. **Always** apply and verify against `docs/github-branch-protection.md`:
+
+1. Default branch = **`main`** (template tree + `SECURITY.md`).
+2. Enable **Dependabot alerts** (`PUT …/vulnerability-alerts`).
+3. Enable **secret scanning** + **push protection**.
+4. Create/update ruleset `default` on `main` + `staging` (PR required, no force-push/delete, required check **`Required CI`** only).
+5. Actions workflow permissions: `GITHUB_TOKEN` **read**, cannot approve PRs.
+6. CodeQL **default** setup stays **off** (in-repo advanced workflow only).
+7. Prefer Issues/Wiki/Projects **off** for static apps.
+
+**Verify via `gh api` before checking this box.** Do not copy Block Drop checklist text that says controls “were already on.”
+
 ### 8. First local applies
 
 Order (adjust if bootstrap already exists):
@@ -130,11 +145,13 @@ Confirm Cloudflare-only gate (raw CloudFront URL 403; custom domain 200).
 - Recreating zone rulesets / Infinity / GitHub plugin inside the new app.
 - Making the new app depend on Block Drop (or any sibling) for edge/obs.
 - Leaving `block-drop-*` alwaysApply rules that contradict the new product.
+- Shipping workflows/docs while leaving Code security / rulesets / default branch at legacy defaults (especially on **migrated** repos).
+- Marking secret scanning / Dependabot alerts “done” without an API verify against the target repo.
 
 ## References
 
 - `docs/architecture.md`, platform `docs/architecture.md`
 - `.cursor/rules/README.md`
 - `docs/adr/` (especially 0003 local apply, 0005 Cloudflare-only, 0006 env separation, 0007 platform)
-- `SECURITY.md`, `infra/terraform/docs/origin-verify-secret-rotation.md`
+- `SECURITY.md`, `docs/github-branch-protection.md`, `infra/terraform/docs/origin-verify-secret-rotation.md`
 - `docs/template-readiness-backlog.md`

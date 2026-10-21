@@ -31,8 +31,8 @@ variable "site_certificate_arn" {
 variable "github_actions_subject" {
   description = "GitHub Actions OIDC subject for the production GitHub Environment (jobs with environment: production). Confirm via CloudTrail if assume fails."
   type        = string
-  # play-scala tokens use the classic sub (no @ownerId/@repoId); block-drop uses the ID form.
-  default = "repo:7oas7er/play-scala:environment:production"
+  # Classic sub (no @ownerId/@repoId); block-drop uses the ID form. Repo renamed play-scala → netrunner.
+  default = "repo:7oas7er/netrunner:environment:production"
 }
 
 variable "origin_verify_secret" {
