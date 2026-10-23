@@ -39,9 +39,11 @@ output "synthetic_check_jobs" {
   ]
 }
 
-output "netrunner_dashboard_url" {
-  description = "URL of the Netrunner overview dashboard."
-  value       = grafana_dashboard.netrunner.url
+output "netrunner_dashboard_urls" {
+  description = "URLs of the Netrunner Production and Staging dashboards."
+  value = {
+    for env, dash in grafana_dashboard.netrunner_env : env => dash.url
+  }
 }
 
 output "netrunner_folder_uid" {

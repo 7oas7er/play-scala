@@ -8,6 +8,6 @@ alwaysApply: true
 Platform Grafana pattern: `app-observability`.
 
 - Synthetic / dashboard label: `project=netrunner`
-- Dashboard JSON: `infra/terraform/grafana/dashboards/netrunner.json`
+- Dashboard JSON: `infra/terraform/grafana/dashboards/netrunner-prod.json` and `netrunner-stg.json` (generate via `scripts/generate-env-dashboards.py`)
 - Folder title: **Netrunner**
 - Synthetics: site checks for stg + prod only (no API checks)
