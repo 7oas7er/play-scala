@@ -81,6 +81,11 @@ resource "grafana_cloud_provider_aws_cloudwatch_scrape_job" "netrunner" {
       statistics = ["Average"]
     }
 
+    metric {
+      name       = "OriginLatency"
+      statistics = ["Average"]
+    }
+
     tags_to_add_to_metrics = ["Name"]
   }
 
